@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "980834247079",
+    "project_id": "tee-together-d36fa",
+    "storage_bucket": "tee-together-d36fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980834247079:android:0966548ca0d90d2c551682",
+        "android_client_info": {
+          "package_name": "com.example.tee_together"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwlIJZto7k6p4b9p8mpO9jO6yhf8wo3eY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

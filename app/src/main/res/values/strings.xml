@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Tee-Together</string>
+    <string name="NewAccount">Create Account</string>
+    <string name="OldAccount">I already have an account</string>
 </resources>

@@ -9,10 +9,35 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:foregroundTint="#B61313"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#26832A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.257" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/NewAccount"
+        android:textColorHighlight="#26832A"
+        android:textColorLink="#26832A"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="#26832A"
+        app:rippleColor="#4CAF50"
+        tools:layout_editor_absoluteX="119dp"
+        tools:layout_editor_absoluteY="274dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/OldAccount"
+        tools:layout_editor_absoluteX="101dp"
+        tools:layout_editor_absoluteY="368dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
