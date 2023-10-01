@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Tee-Together</string>
+    <string name="scorecard_title">Scorecard</string>
 </resources>
