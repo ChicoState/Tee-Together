@@ -1,141 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-    <ScrollView
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <TextView
+        android:id="@+id/scorecard_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Scorecard"/>
+    <LinearLayout
+        android:id="@+id/scores_for_holes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scorecard_title">
+        <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/cell_shape">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hole 1"
+                android:padding="16dp"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/baseline_add_24"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/baseline_remove_24"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="Score: 0"
+                android:padding="16dp"/>
+        </LinearLayout>
+ -->
+    </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/scorecard_background">
-        <TableLayout
+        app:layout_constraintTop_toBottomOf="@id/scores_for_holes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TableRow
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:fabAlignmentMode="center"
+            app:navigationIcon="@drawable/baseline_arrow_back_24" >
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="match_parent"
+                android:gravity="end"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Scorecard"
-                    android:textSize="20sp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="14dp"/>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:text=""
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="Nolan"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="Aaron"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="@null"/>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:text="Hole 1"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="5"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="11"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:text="Hole 2"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="8"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="23"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:text="@null"/>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:text="Handicap"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="10"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="2"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:text="Scores"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="3"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-                <TextView
-                    android:text="32"
-                    android:background="@drawable/cell_shape"
-                    android:padding="20dip">
-                </TextView>
-            </TableRow>
-
-        </TableLayout>
-    </ScrollView>
-
+                    android:background="@null"
+                    android:src="@drawable/baseline_arrow_forward_24"/>
+            </LinearLayout>
+        </com.google.android.material.bottomappbar.BottomAppBar>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_hole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_add_24"
+            app:layout_anchor="@id/bottomAppBar" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
