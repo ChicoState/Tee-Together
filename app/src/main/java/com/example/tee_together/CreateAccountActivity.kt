@@ -1,11 +1,12 @@
 package com.example.tee_together
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tee_together.databinding.ActivityCreateAccountBinding
-import com.google.firebase.auth.FirebaseAuth // Package is used to utilize firebase
-import com.google.firebase.firestore.FirebaseFirestore // FireStore Package
-import android.widget.Toast // Package allows for notification popups based on user actions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CreateAccountActivity : AppCompatActivity() {
 
@@ -45,6 +46,8 @@ class CreateAccountActivity : AppCompatActivity() {
                                         "Account and User Data Created Successfully!",
                                         Toast.LENGTH_LONG
                                     ).show()
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    startActivity(intent)
                                 } else {
                                     Toast.makeText(
                                         this,
