@@ -1,10 +1,10 @@
 package com.example.tee_together
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
 
             //some kind of logic to see if the user actually exists
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, ScoreCardActivity::class.java)
             intent.putExtra("username", username)
             intent.putExtra("password", password)
             startActivity(intent)

@@ -25,9 +25,10 @@ class ScoreCardActivity : AppCompatActivity() {
             scorecardHandler.createNewHole(containerScores, this)
         }
         changeToResult.setOnClickListener(View.OnClickListener {
+            val name = intent.getStringExtra("username")
             if (scorecardHandler.getStrokesForHoles().toIntArray().isNotEmpty()) {
                 val intent = Intent(this, ScoreCardResultActivity::class.java)
-                intent.putExtra("player_names", "Player 1")
+                intent.putExtra("player_names", name)
                 intent.putExtra(
                     "strokes_per_holes",
                     scorecardHandler.getStrokesForHoles().toIntArray()

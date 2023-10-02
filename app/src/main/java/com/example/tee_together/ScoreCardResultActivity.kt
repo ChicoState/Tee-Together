@@ -16,7 +16,7 @@ class ScoreCardResultActivity : AppCompatActivity() {
         setContentView(R.layout.activity_scorecard_result)
         val tableLayoutContainer = findViewById<TableLayout>(R.id.scorecard_table)
         var scoreCardResultHandler = ScoreCardResultHandler()
-        scoreCardResultHandler.createResult("Player 1", intent.getIntArrayExtra("strokes_per_holes"), tableLayoutContainer, this)
+        scoreCardResultHandler.createResult(intent.getStringExtra("player_names"), intent.getIntArrayExtra("strokes_per_holes"), tableLayoutContainer, this)
         val navigateBack = findViewById<BottomAppBar>(R.id.bottomAppBarScorecardResult)
         navigateBack.setOnClickListener{
             finish()
@@ -25,7 +25,7 @@ class ScoreCardResultActivity : AppCompatActivity() {
 }
 
 class ScoreCardResultHandler(){
-    fun createResult(playerNames: String, strokes: IntArray?, container: TableLayout, context: Context){
+    fun createResult(playerNames: String?, strokes: IntArray?, container: TableLayout, context: Context){
 
         // Begin by iterating through player names and adding each player
         val players = TableRow(context)
