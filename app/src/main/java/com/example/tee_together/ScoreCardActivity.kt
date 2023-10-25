@@ -18,7 +18,7 @@ class ScoreCardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scorecard)
         var scorecardHandler = ScoreCardHandler()
-        val addHole = findViewById<FloatingActionButton>(R.id.add_hole)
+        val addHole = findViewById<ImageButton>(R.id.add_hole)
         val containerScores = findViewById<LinearLayout>(R.id.scores_for_holes)
         val changeToResult = findViewById<ImageButton>(R.id.change_to_result_scorecard)
         addHole.setOnClickListener {
