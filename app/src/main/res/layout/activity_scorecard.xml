@@ -132,8 +132,8 @@
             android:src="@drawable/map_24px"
             app:layout_anchor="@+id/bottom_app_bar"
             app:layout_anchorGravity="center" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
