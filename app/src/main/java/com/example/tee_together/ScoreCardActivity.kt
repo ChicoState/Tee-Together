@@ -56,7 +56,7 @@ class ScoreCardHandler{
     private var scores = mutableListOf<Int>()
 
     fun createNewHole(container: LinearLayout, context: Context){
-        scores.add(0)
+        scores.add(1)
         val newScore = LinearLayout(context)
         newScore.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,

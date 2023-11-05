@@ -17,6 +17,7 @@ class ScoreCardResultActivity : AppCompatActivity() {
         val tableLayoutContainer = findViewById<TableLayout>(R.id.scorecard_table)
         var scoreCardResultHandler = ScoreCardResultHandler()
         scoreCardResultHandler.createResult(intent.getStringExtra("player_names"), intent.getIntArrayExtra("strokes_per_holes"), tableLayoutContainer, this)
+        // For the user, push this data back onto firebase for this game
         val navigateBack = findViewById<BottomAppBar>(R.id.bottomAppBarScorecardResult)
         navigateBack.setOnClickListener{
             finish()
