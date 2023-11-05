@@ -16,6 +16,9 @@
             android:name=".ScoreCardActivity"
             android:exported="false" />
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ScoreCardResultActivity"
             android:exported="false"/>
         <activity
