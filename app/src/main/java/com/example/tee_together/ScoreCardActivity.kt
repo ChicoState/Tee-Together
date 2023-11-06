@@ -3,15 +3,15 @@ package com.example.tee_together
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import android.widget.Toast
 
 
 
@@ -26,7 +26,7 @@ class ScoreCardActivity : AppCompatActivity() {
         val addHole = findViewById<FloatingActionButton>(R.id.add_hole)
         val containerScores = findViewById<LinearLayout>(R.id.scores_for_holes)
         val changeToResult = findViewById<ImageButton>(R.id.change_to_result_scorecard)
-
+        val goToProfile = findViewById<BottomAppBar>(R.id.bottomAppBar)
         addHole.setOnClickListener {
             scorecardHandler.createNewHole(containerScores, this)
         }
@@ -43,6 +43,10 @@ class ScoreCardActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        goToProfile.setNavigationOnClickListener{
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
 
@@ -57,7 +61,7 @@ class ScoreCardHandler {
             Toast.makeText(context, "Maximum number of holes reached.", Toast.LENGTH_SHORT).show()
             return // Stop the function from proceeding further
         }
-        scores.add(0)
+        scores.add(1)
         val newScore = LinearLayout(context)
         newScore.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -72,7 +76,6 @@ class ScoreCardHandler {
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
         holeNumber.setPadding(16)
-        Log.d("Hello", "hello $holeCount")
         val holeToPrint = holeCount + 1
         holeNumber.text = "Hole $holeToPrint"
         holeCount += 1

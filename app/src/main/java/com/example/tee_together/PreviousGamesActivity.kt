@@ -1,7 +1,9 @@
 package com.example.tee_together
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,11 @@ class PreviousGamesActivity : AppCompatActivity() {
         val layoutContainer = findViewById<LinearLayout>(R.id.previous_games)
         var previousGamesBuilder = PreviousGamesBuilder()
         previousGamesBuilder.buildActivity(layoutContainer, this)
+        val previous = findViewById<ImageButton>(R.id.back_from_previous)
+        previous.setOnClickListener{
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
 
