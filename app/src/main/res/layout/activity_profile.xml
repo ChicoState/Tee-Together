@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ProfileActivity">
+
+    <!-- Content View -->
+    <FrameLayout
+        android:id="@+id/contentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Profile Information Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@android:color/background_light">
+
+            <!-- Username (TextView) -->
+            <TextView
+                android:id="@+id/profileUsername"
+                android:layout_width="299dp"
+                android:layout_height="61dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Username"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <!-- Sign Out Button -->
+            <Button
+                android:id="@+id/signOutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Sign Out" />
+
+            <!-- Add more placeholders for future content here -->
+        </LinearLayout>
+    </FrameLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
+

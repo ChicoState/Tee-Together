@@ -5,18 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.Toast
-import android.widget.Button
-import com.google.firebase.firestore.FieldValue
 
 
 
@@ -54,8 +49,14 @@ class ScoreCardActivity : AppCompatActivity() {
 class ScoreCardHandler {
     private var holeCount = 0
     private var scores = mutableListOf<Int>()
+    private var maxHoles = 18
 
     fun createNewHole(container: LinearLayout, context: Context) {
+        // Check if the hole count has reached the maximum
+        if (holeCount >= maxHoles) {
+            Toast.makeText(context, "Maximum number of holes reached.", Toast.LENGTH_SHORT).show()
+            return // Stop the function from proceeding further
+        }
         scores.add(0)
         val newScore = LinearLayout(context)
         newScore.layoutParams = LinearLayout.LayoutParams(

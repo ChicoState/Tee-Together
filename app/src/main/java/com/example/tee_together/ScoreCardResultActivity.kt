@@ -60,7 +60,7 @@ class ScoreCardResultHandler(){
                 "timestamp" to FieldValue.serverTimestamp() // Utilizing FieldValue.serverTimestamp() directly
             )
 
-            // Proceed to save the data in Firestore
+            // Save the data in Firestore
             db.collection("users").document(firebaseUser.uid)
                 .collection("games").add(scorecardData)
                 .addOnSuccessListener {
