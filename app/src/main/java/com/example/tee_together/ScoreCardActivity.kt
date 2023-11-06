@@ -12,21 +12,33 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import android.widget.Toast
+import android.widget.Button
+import com.google.firebase.firestore.FieldValue
+
+
 
 class ScoreCardActivity : AppCompatActivity() {
+    private lateinit var scorecardHandler: ScoreCardHandler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scorecard)
-        var scorecardHandler = ScoreCardHandler()
+
+        scorecardHandler = ScoreCardHandler()
         val addHole = findViewById<FloatingActionButton>(R.id.add_hole)
         val containerScores = findViewById<LinearLayout>(R.id.scores_for_holes)
         val changeToResult = findViewById<ImageButton>(R.id.change_to_result_scorecard)
+
         addHole.setOnClickListener {
             scorecardHandler.createNewHole(containerScores, this)
         }
-        changeToResult.setOnClickListener(View.OnClickListener {
+
+        changeToResult.setOnClickListener {
             val name = intent.getStringExtra("username")
-            if (scorecardHandler.getStrokesForHoles().toIntArray().isNotEmpty()) {
+            if (scorecardHandler.getStrokesForHoles().isNotEmpty()) {
                 val intent = Intent(this, ScoreCardResultActivity::class.java)
                 intent.putExtra("player_names", name)
                 intent.putExtra(
@@ -35,15 +47,15 @@ class ScoreCardActivity : AppCompatActivity() {
                 )
                 startActivity(intent)
             }
-        })
+        }
     }
 }
 
-class ScoreCardHandler{
+class ScoreCardHandler {
     private var holeCount = 0
     private var scores = mutableListOf<Int>()
 
-    fun createNewHole(container: LinearLayout, context: Context){
+    fun createNewHole(container: LinearLayout, context: Context) {
         scores.add(0)
         val newScore = LinearLayout(context)
         newScore.layoutParams = LinearLayout.LayoutParams(
@@ -88,7 +100,7 @@ class ScoreCardHandler{
         holeScore.text = "Score: $currScore"
         val index = holeCount - 1
         decrementButton.setOnClickListener {
-            if (scores[index] > 0){
+            if (scores[index] > 0) {
                 scores[index] -= 1
             }
             val score = scores[index]
@@ -105,6 +117,7 @@ class ScoreCardHandler{
         newScore.addView(decrementButton)
         newScore.addView(holeScore)
     }
+
     fun getStrokesForHoles(): MutableList<Int> {
         return scores;
     }
