@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#355e3b">
     <TextView
         android:id="@+id/previous_games_title"
         android:layout_width="wrap_content"
@@ -11,7 +12,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Previous Games"/>
+        android:text="Previous Games"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"/>
     <LinearLayout
         android:id="@+id/previous_games"
         android:orientation="vertical"
@@ -19,8 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
     </LinearLayout>
 

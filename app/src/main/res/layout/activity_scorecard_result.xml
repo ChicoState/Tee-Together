@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#355e3b">
 
     <!-- The existing ConstraintLayout and its contents like TextView and TableLayout -->
 
@@ -21,6 +22,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:text="Final Scorecard"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
             android:padding="16dp"/>
 
         <!-- Existing TableLayout for the scorecard -->

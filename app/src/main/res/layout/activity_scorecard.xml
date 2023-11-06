@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#355e3b"
     tools:context=".MainActivity">
     <TextView
         android:id="@+id/scorecard_title"
@@ -13,7 +14,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Scorecard"/>
+        android:text="Scorecard"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"/>
     <LinearLayout
         android:id="@+id/scores_for_holes"
         android:layout_width="match_parent"
