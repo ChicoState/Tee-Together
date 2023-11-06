@@ -40,22 +40,22 @@ class LoginActivity : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            goToScoreCardActivity()
+            goToProfileActivity()
         }
     }
 
     private fun signInUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                goToScoreCardActivity()
+                goToProfileActivity()
             } else {
                 Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun goToScoreCardActivity() {
-        val intent = Intent(this, ScoreCardActivity::class.java)
+    private fun goToProfileActivity() {
+        val intent = Intent(this, ProfileActivity::class.java)
         startActivity(intent)
         finish()  // Finish LoginActivity so it's removed from the back stack
     }

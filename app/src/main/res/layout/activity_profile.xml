@@ -44,6 +44,24 @@
                 android:layout_marginTop="16dp"
                 android:text="Sign Out" />
 
+            <!-- Previous Games Button -->
+            <Button
+                android:id="@+id/btnPreviousGames"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Game History"
+                android:layout_gravity="center" />
+
+            <!-- Start New Scorecard Button -->
+            <Button
+                android:id="@+id/btnNewScorecard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Start New Scorecard"
+                android:layout_gravity="center" />
+
             <!-- Add more placeholders for future content here -->
         </LinearLayout>
     </FrameLayout>

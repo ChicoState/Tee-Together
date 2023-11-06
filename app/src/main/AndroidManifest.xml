@@ -13,6 +13,12 @@
         android:theme="@style/Theme.TeeTogether"
         tools:targetApi="31">
         <activity
+            android:name=".PreviousGamesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ScoreCardActivity"
             android:exported="false" />
         <activity

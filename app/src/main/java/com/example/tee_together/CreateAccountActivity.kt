@@ -48,7 +48,7 @@ class CreateAccountActivity : AppCompatActivity() {
                                 FirebaseFirestore.getInstance().collection("users").document(user.uid).set(userMap)
                                     .addOnCompleteListener { firestoreTask ->
                                         if (firestoreTask.isSuccessful) {
-                                            navigateToScoreCardActivity(displayName)
+                                            goToProfileActivity()
                                         } else {
                                             displayError(firestoreTask.exception)
                                         }
@@ -67,12 +67,18 @@ class CreateAccountActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToScoreCardActivity(displayName: String) {
-        // Automatically log the user in and navigate to the ScoreCardActivity
-        val intent = Intent(this, ScoreCardActivity::class.java)
-        intent.putExtra("displayName", displayName) // Passing the display name to ScoreCardActivity
+//    private fun navigateToScoreCardActivity(displayName: String) {
+//        // Automatically log the user in and navigate to the ScoreCardActivity
+//        val intent = Intent(this, ScoreCardActivity::class.java)
+//        intent.putExtra("displayName", displayName) // Passing the display name to ScoreCardActivity
+//        startActivity(intent)
+//        finish() // This will remove the CreateAccountActivity from the back stack
+//    }
+
+    private fun goToProfileActivity() {
+        val intent = Intent(this, ProfileActivity::class.java)
         startActivity(intent)
-        finish() // This will remove the CreateAccountActivity from the back stack
+        finish()  // Finish LoginActivity so it's removed from the back stack
     }
 
     private fun displayError(exception: Exception?) {
