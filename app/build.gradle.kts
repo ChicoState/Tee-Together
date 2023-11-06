@@ -60,4 +60,10 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
 
     implementation("com.google.firebase:firebase-analytics-ktx")
+
+    //google play services dependencies
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation ("com.google.android.material:material:1.5.0")
+
 }

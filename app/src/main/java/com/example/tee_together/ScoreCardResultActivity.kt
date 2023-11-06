@@ -1,6 +1,7 @@
 package com.example.tee_together
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.TableLayout
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ScoreCardResultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +22,13 @@ class ScoreCardResultActivity : AppCompatActivity() {
         val navigateBack = findViewById<BottomAppBar>(R.id.bottomAppBarScorecardResult)
         navigateBack.setOnClickListener{
             finish()
+        }
+        val profileButton = findViewById<FloatingActionButton>(R.id.profileButton)
+
+        profileButton.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            //intent.putExtra("extra_key", "extra_value")
+            startActivity(intent)
         }
     }
 }

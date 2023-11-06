@@ -38,5 +38,13 @@
             app:fabAlignmentMode="center"
             app:navigationIcon="@drawable/baseline_arrow_back_24" >
         </com.google.android.material.bottomappbar.BottomAppBar>
+
+        <include
+            android:id="@+id/profileButton"
+            layout="@layout/profilebutton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

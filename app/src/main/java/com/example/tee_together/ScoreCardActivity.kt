@@ -36,6 +36,13 @@ class ScoreCardActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+            val profileButton = findViewById<FloatingActionButton>(R.id.profileButton)
+
+            profileButton.setOnClickListener {
+                val intent = Intent(this, ProfileActivity::class.java)
+                //intent.putExtra("extra_key", "extra_value")
+                startActivity(intent)
+        }
     }
 }
 

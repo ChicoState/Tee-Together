@@ -15,4 +15,7 @@
     <string name="profile_button">drawable/baseline_person_24</string>
     <string name="map_button">drawable/map_24px</string>
 
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
 </resources>
