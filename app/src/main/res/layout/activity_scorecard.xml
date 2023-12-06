@@ -30,8 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Include other widget or layout tags here. These are considered "child views" of the linear layout -->
-
     </LinearLayout>
 
     <ImageButton
@@ -87,6 +85,7 @@
         app:layout_constraintTop_toBottomOf="@+id/scorecard_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
