@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import android.widget.CheckBox
+import java.io.Serializable
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ScoreCardActivity : AppCompatActivity() {
@@ -45,8 +46,8 @@ class ScoreCardActivity : AppCompatActivity() {
                 intent.putExtra( //idk if this accepts a list of HoleData class objects
                     //possible solution is just splitting up the HoleData stuff into returning three separate lists and returning those
                     //i don't want to fuck it up and someone probably knows better than me how putExtra works
-                    "strokes_per_holes",
-                    scorecardHandler.getStrokesForHoles() //I think this needs to be the full HoleData array holes
+                    "hole_data",
+                    ArrayList(scorecardHandler.getStrokesForHoles()) //I think this needs to be the full HoleData array holes
                 )
                 startActivity(intent)
             }
@@ -58,7 +59,7 @@ class ScoreCardHandler{
     private var holes = mutableListOf<HoleData>()
 
     fun createNewHole(container: LinearLayout, context: Context){
-        holeCount += 1
+        holes.add(HoleData(0, false, false))
         val newScore = LinearLayout(context)
         newScore.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -96,7 +97,7 @@ class ScoreCardHandler{
         Log.d("Hello", "hello $holeCount")
         val holeToPrint = holeCount + 1
         holeNumber.text = "Hole $holeToPrint"
-        holeCount += 1
+        holeCount+=1;
         val incrementButton = ImageButton(context)
         incrementButton.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -118,7 +119,8 @@ class ScoreCardHandler{
         )
         holeScore.gravity = Gravity.END
         holeScore.setPadding(16)
-        val currScore = holes[holeCount - 1].score
+        val currScore = if (holes.isNotEmpty()) holes[holeCount - 1].score else 0
+        //holeCount+=1;
         holeScore.text = "Score: $currScore"
         val index = holeCount - 1
         decrementButton.setOnClickListener {
@@ -138,8 +140,17 @@ class ScoreCardHandler{
         newScore.addView(incrementButton)
         newScore.addView(decrementButton)
         newScore.addView(holeScore)
+
+        firCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            holes[index].fir = isChecked
+        }
+
+        girCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            holes[index].gir = isChecked
+        }
+
     }
     fun getStrokesForHoles(): MutableList<HoleData> {
-        return holes;
+        return holes
     }
 }
