@@ -25,6 +25,11 @@
             android:layout_height="wrap_content"
             android:hint="Last Name"
             android:inputType="text" />
+        <EditText
+            android:id="@+id/editTextDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Display Name" />
 
         <EditText
             android:id="@+id/editTextEmail"
