@@ -1,44 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/constraint_result"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#355e3b">
-    <TextView
-        android:id="@+id/scorecard_result_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Final Scorecard"
-        android:textColor="#FFFFFF"
-        android:padding="16dp"/>
-    <TableLayout
-        android:id="@+id/scorecard_table"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scorecard_result_title">
 
-    </TableLayout>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/scorecard_table"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+    <!-- The existing ConstraintLayout and its contents like TextView and TableLayout -->
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBarScorecardResult"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Existing TextView for the title -->
+        <TextView
+            android:id="@+id/scorecard_result_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Final Scorecard"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:padding="16dp"/>
+
+        <!-- Existing TableLayout for the scorecard -->
+        <TableLayout
+            android:id="@+id/scorecard_table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:fabAlignmentMode="center"
-            app:navigationIcon="@drawable/baseline_arrow_back_24" >
-        </com.google.android.material.bottomappbar.BottomAppBar>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scorecard_result_title">
+        </TableLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- BottomAppBar within the CoordinatorLayout -->
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBarScorecardResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:fabAlignmentMode="center"
+        app:navigationIcon="@drawable/baseline_arrow_back_24">
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <!-- Button added here -->
+    <Button
+        android:id="@+id/save_scorecard_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Scorecard"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="16dp"
+        app:layout_anchor="@id/bottomAppBarScorecardResult"
+        app:layout_anchorGravity="top|center_horizontal"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
