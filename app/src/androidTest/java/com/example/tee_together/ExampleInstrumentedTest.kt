@@ -4,14 +4,22 @@ import android.os.Looper
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -262,16 +270,49 @@ class ScoreCardHandlerTest {
 
 @RunWith(AndroidJUnit4::class)
 class PreviousGamesTester{
-    private lateinit var builder: PreviousGamesBuilder
-    private lateinit var context: android.content.Context
-    private lateinit var auth: FirebaseAuth
+    @Test
+    fun verifyPreviousGamesStoredForKnownUser() {
+        val auth = FirebaseAuth.getInstance()
+        val userCredential = Tasks.await(auth.signInWithEmailAndPassword("topnolan1@gmail.com", "password"))
+        var db = FirebaseFirestore.getInstance()
+        var userid = auth.uid.toString()
+        db.collection("users").document(userid).collection("games").get().addOnSuccessListener {
+                querySnapshot ->
+            assertNotNull(querySnapshot)
+        }
+    }
+}
 
-    // Set up our testing environment. Get context and initialize the handler
+@RunWith(AndroidJUnit4::class)
+class LoginTester{
+    private lateinit var activity: ActivityScenario<LoginActivity>
+
     @Before
     fun setUp() {
-        context = ApplicationProvider.getApplicationContext()
-        builder = PreviousGamesBuilder()
-        auth.signInWithEmailAndPassword("topnolan1@gmail.com","password")
+        activity = ActivityScenario.launch(LoginActivity::class.java)
     }
-    
+
+    @Test
+    fun validSignIn() {
+        // Type valid credentials and click login button
+        onView(withId(R.id.usernameEditText)).perform(typeText("topnolan1@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.passwordEditText)).perform(typeText("password"), closeSoftKeyboard())
+        onView(withId(R.id.loginButton)).perform(click())
+        // Sleep for a few seconds to allow firebase to do its thing
+        Thread.sleep(5000)
+
+        // Verify that ProfileActivity is displayed, just try and look for some id that should be on profile if we logged in
+        onView(withId(R.id.contentFrame)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun validActionByDefault() {
+        val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser == null){
+            onView(withId(R.id.usernameEditText)).check(matches(isDisplayed()))
+        } else{
+            onView(withId(R.id.contentFrame)).check(matches(isDisplayed()))
+        }
+    }
 }
+
