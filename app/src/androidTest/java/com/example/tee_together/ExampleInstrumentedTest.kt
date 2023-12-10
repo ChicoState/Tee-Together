@@ -338,11 +338,8 @@ class LoginTester{
         // Sleep for a few seconds to allow firebase to do its thing
         Thread.sleep(5000)
 
-        // Verify that ProfileActivity is displayed, just try and look for some id that should be on profile if we logged in
+        // Verify that ProfileActivity is displayed, just try and look for some id on login activity to show that we didn't go to profile activity
         onView(withId(R.id.usernameEditText)).check(matches(isDisplayed()))
     }
-
 }
-
-
 
