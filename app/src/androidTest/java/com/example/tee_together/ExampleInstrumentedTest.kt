@@ -531,6 +531,17 @@ class ProfileActivityTester{
         onView(withId(R.id.btnNewScorecard)).perform(click())
         onView(withId(R.id.add_hole)).check(matches(isDisplayed()))
     }
+    @Test
+    fun verifyPreviousGameButtonWorksCorrectly() {
+        // Make sure we sign in just in case
+        val auth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword("topnolan1@gmail.com", "password")
+        Thread.sleep(5000)
+        activity = ActivityScenario.launch(ProfileActivity::class.java)
+
+        onView(withId(R.id.btnPreviousGames)).perform(click())
+        onView(withId(R.id.previous_games)).check(matches(isDisplayed()))
+    }
 }
 
 
