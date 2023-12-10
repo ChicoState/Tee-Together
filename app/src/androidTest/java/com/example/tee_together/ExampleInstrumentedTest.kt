@@ -1,5 +1,8 @@
 package com.example.tee_together
 
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -33,6 +36,63 @@ class ScoreCardHandlerTest {
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         handler = ScoreCardHandler()
+    }
+
+    @Test
+    fun verifySingleHoleRenderedCorrect() {
+        val linearlayout = LinearLayout(context)
+        // Create a new hole
+        handler.createNewHole(linearlayout, context)
+
+        // This should be a linear layout according to how our handler works, so convert the view to it
+        val firstHole = linearlayout.getChildAt(0) as LinearLayout
+        // The first widget in linear layout is the hole number
+        val firstHoleNumberView = firstHole.getChildAt(0) as TextView
+        // The second widget in linear layout is the score
+        val firstHoleScore = firstHole.getChildAt(3) as TextView
+
+        assertEquals("Hole 1", firstHoleNumberView.text.toString())
+        assertEquals("Score: 1", firstHoleScore.text.toString())
+
+    }
+
+    @Test
+    fun verifySingleHoleRendersCorrectlyOnSingleIncrement() {
+        val linearlayout = LinearLayout(context)
+        // Create a new hole
+        handler.createNewHole(linearlayout, context)
+
+        // This should be a linear layout according to how our handler works, so convert the view to it
+        val firstHole = linearlayout.getChildAt(0) as LinearLayout
+        val incrementFirstHole = firstHole.getChildAt(1) as ImageButton
+        // The second widget in linear layout is the score
+        val firstHoleScore = firstHole.getChildAt(3) as TextView
+
+        assertEquals("Score: 1", firstHoleScore.text.toString())
+        incrementFirstHole.performClick()
+        assertEquals("Score: 2", firstHoleScore.text.toString())
+
+    }
+
+    @Test
+    fun verifySingleHoleRendersCorrectlyOnManyIncrement() {
+        val linearlayout = LinearLayout(context)
+        // Create a new hole
+        handler.createNewHole(linearlayout, context)
+
+        // This should be a linear layout according to how our handler works, so convert the view to it
+        val firstHole = linearlayout.getChildAt(0) as LinearLayout
+        val incrementFirstHole = firstHole.getChildAt(1) as ImageButton
+        // The second widget in linear layout is the score
+        val firstHoleScore = firstHole.getChildAt(3) as TextView
+
+        // Click increment 100 times
+        for(i in 1 .. 100){
+            incrementFirstHole.performClick()
+            val currScore = i + 1
+            assertEquals("Score: $currScore", firstHoleScore.text.toString())
+        }
+
     }
 
 }
