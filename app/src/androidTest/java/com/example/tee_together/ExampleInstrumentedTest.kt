@@ -155,6 +155,74 @@ class ScoreCardHandlerTest {
         assertEquals("Score: 0", firstHoleScore.text.toString())
     }
 
+    @Test
+    fun verifyMultipleHolesCanBeCreated() {
+        val linearlayout = LinearLayout(context)
+        // Create a new hole
+        handler.createNewHole(linearlayout, context)
+        handler.createNewHole(linearlayout, context)
+
+        val firstHole = linearlayout.getChildAt(0) as LinearLayout
+        val secondHole = linearlayout.getChildAt(1) as LinearLayout
+
+        val firstHoleCount = firstHole.getChildAt(3) as TextView
+        val secondHoleCount = secondHole.getChildAt(3) as TextView
+
+        assertEquals("Hole 1", firstHoleCount.text.toString())
+        assertEquals("Hole 2", secondHoleCount.text.toString())
+    }
+
+    fun verifyMultipleHolesCanBeDecrementedIncremented() {
+        val linearlayout = LinearLayout(context)
+        // Create a new hole
+        handler.createNewHole(linearlayout, context)
+        handler.createNewHole(linearlayout, context)
+
+        val firstHole = linearlayout.getChildAt(0) as LinearLayout
+        val secondHole = linearlayout.getChildAt(1) as LinearLayout
+
+        val firstScoreCount = firstHole.getChildAt(3) as TextView
+        val secondScoreCount = secondHole.getChildAt(3) as TextView
+
+        val firstScoreInc = firstHole.getChildAt(1) as ImageButton
+        val secondScoreInc = secondHole.getChildAt(1) as ImageButton
+
+        val firstScoreDec = firstHole.getChildAt(2) as ImageButton
+        val secondScoreDec = secondHole.getChildAt(2) as ImageButton
+
+
+        assertEquals("Score: 1", firstScoreCount.text.toString())
+        assertEquals("Score: 1", secondScoreCount.text.toString())
+
+        // Increment Both To Begin
+        firstScoreInc.performClick()
+        secondScoreInc.performClick()
+
+        assertEquals("Score: 2", firstScoreCount.text.toString())
+        assertEquals("Score: 2", secondScoreCount.text.toString())
+
+        //Increment Just the Second
+        secondScoreInc.performClick()
+        // Verify first hole score didn't increment as well
+        assertEquals("Score: 2", firstScoreCount.text.toString())
+        // Verify second hole score did increment
+        assertEquals("Score: 3", secondScoreCount.text.toString())
+
+        //Decrement Both
+        firstScoreDec.performClick()
+        secondScoreDec.performClick()
+        assertEquals("Score: 1", firstScoreCount.text.toString())
+        assertEquals("Score: 2", secondScoreCount.text.toString())
+
+        // Decrement Just the second hole
+        secondScoreDec.performClick()
+
+        // Verify first hole score didn't decrement as well
+        assertEquals("Score: 1", firstScoreCount.text.toString())
+        // Verify second hole score did decrement
+        assertEquals("Score: 1", secondScoreCount.text.toString())
+    }
+
 
 
 
