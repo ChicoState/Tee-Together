@@ -343,3 +343,113 @@ class LoginTester{
     }
 }
 
+@RunWith(AndroidJUnit4::class)
+class CreateAccountTester {
+    private lateinit var activity: ActivityScenario<CreateAccountActivity>
+
+    @Before
+    fun setUp() {
+        activity = ActivityScenario.launch(CreateAccountActivity::class.java)
+    }
+
+    @Test
+    fun invalidEmailCreateAccount() {
+        // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
+        onView(withId(R.id.editTextDisplayName)).perform(typeText("blahthousand100"), closeSoftKeyboard())
+        onView(withId(R.id.editTextFirstName)).perform(typeText("blah"), closeSoftKeyboard())
+        onView(withId(R.id.editTextLastName)).perform(typeText("thousand"), closeSoftKeyboard())
+        onView(withId(R.id.editTextEmail)).perform(typeText("nonothisisbadandwillnotworkuhoh"), closeSoftKeyboard())
+        onView(withId(R.id.editTextPassword)).perform(typeText("uhuhnono"), closeSoftKeyboard())
+        onView(withId(R.id.buttonCreateAccount)).perform(click())
+        Thread.sleep(5000)
+        // Since we failed to login this should check as we haven;t switched pages
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun invalidPasswordCreateAccount() {
+        // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
+        onView(withId(R.id.editTextDisplayName)).perform(typeText("blahthousand100"), closeSoftKeyboard())
+        onView(withId(R.id.editTextFirstName)).perform(typeText("blah"), closeSoftKeyboard())
+        onView(withId(R.id.editTextLastName)).perform(typeText("thousand"), closeSoftKeyboard())
+        onView(withId(R.id.editTextEmail)).perform(typeText("nonothisisbadandwillnotworkuhoh@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.editTextPassword)).perform(typeText("uhuh"), closeSoftKeyboard())
+        onView(withId(R.id.buttonCreateAccount)).perform(click())
+        Thread.sleep(5000)
+        // Since we failed to login this should check as we haven;t switched pages
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun invalidPasswordEmptyCreateAccount() {
+        // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
+        onView(withId(R.id.editTextDisplayName)).perform(typeText("blahthousand100"), closeSoftKeyboard())
+        onView(withId(R.id.editTextFirstName)).perform(typeText("blah"), closeSoftKeyboard())
+        onView(withId(R.id.editTextLastName)).perform(typeText("thousand"), closeSoftKeyboard())
+        onView(withId(R.id.editTextEmail)).perform(typeText("nonothisisbadandwillnotworkuhoh@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.editTextPassword)).perform(typeText(""), closeSoftKeyboard())
+        onView(withId(R.id.buttonCreateAccount)).perform(click())
+        Thread.sleep(5000)
+        // Since we failed to login this should check as we haven;t switched pages
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun noFirstNameCreateAccount() {
+        // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
+        onView(withId(R.id.editTextDisplayName)).perform(typeText("blahthousand100"), closeSoftKeyboard())
+        onView(withId(R.id.editTextFirstName)).perform(typeText(""), closeSoftKeyboard())
+        onView(withId(R.id.editTextLastName)).perform(typeText("thousand"), closeSoftKeyboard())
+        onView(withId(R.id.editTextEmail)).perform(typeText("nonothisisbadandwillnotworkuhoh@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.editTextPassword)).perform(typeText("uhuuhuhuhu"), closeSoftKeyboard())
+        onView(withId(R.id.buttonCreateAccount)).perform(click())
+        Thread.sleep(5000)
+        // Since we failed to login this should check as we haven;t switched pages
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun noLastNameCreateAccount() {
+        // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
+        onView(withId(R.id.editTextDisplayName)).perform(typeText("blahthousand100"), closeSoftKeyboard())
+        onView(withId(R.id.editTextFirstName)).perform(typeText("blah"), closeSoftKeyboard())
+        onView(withId(R.id.editTextLastName)).perform(typeText(""), closeSoftKeyboard())
+        onView(withId(R.id.editTextEmail)).perform(typeText("nonothisisbadandwillnotworkuhoh@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.editTextPassword)).perform(typeText("uhuuhuhuhu"), closeSoftKeyboard())
+        onView(withId(R.id.buttonCreateAccount)).perform(click())
+        Thread.sleep(5000)
+        // Since we failed to login this should check as we haven;t switched pages
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun noDisplayNameCreateAccount() {
+        // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
+        onView(withId(R.id.editTextDisplayName)).perform(typeText(""), closeSoftKeyboard())
+        onView(withId(R.id.editTextFirstName)).perform(typeText("blah"), closeSoftKeyboard())
+        onView(withId(R.id.editTextLastName)).perform(typeText("thousand"), closeSoftKeyboard())
+        onView(withId(R.id.editTextEmail)).perform(typeText("nonothisisbadandwillnotworkuhoh@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.editTextPassword)).perform(typeText("uhuuhuhuhu"), closeSoftKeyboard())
+        onView(withId(R.id.buttonCreateAccount)).perform(click())
+        Thread.sleep(5000)
+        // Since we failed to login this should check as we haven;t switched pages
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun alreadyExistsCreateAccount() {
+        // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
+        onView(withId(R.id.editTextDisplayName)).perform(typeText("Nolan"), closeSoftKeyboard())
+        onView(withId(R.id.editTextFirstName)).perform(typeText("Top"), closeSoftKeyboard())
+        onView(withId(R.id.editTextLastName)).perform(typeText("Nolan"), closeSoftKeyboard())
+        onView(withId(R.id.editTextEmail)).perform(typeText("topnolan1@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.editTextPassword)).perform(typeText("password"), closeSoftKeyboard())
+        onView(withId(R.id.buttonCreateAccount)).perform(click())
+        Thread.sleep(5000)
+        // Since we failed to login this should check as we haven;t switched pages
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+}
+
