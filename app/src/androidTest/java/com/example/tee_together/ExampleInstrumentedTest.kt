@@ -294,7 +294,14 @@ class LoginTester{
 
     @Test
     fun validSignIn() {
+        val auth = FirebaseAuth.getInstance()
+        // SignOut if not signed out already
+        auth.signOut()
+        // Let firebase sign out
+        Thread.sleep(5000)
+        activity = ActivityScenario.launch(LoginActivity::class.java)
         // Type valid credentials and click login button
+        // These are testing credentials, idc about them being exposed pshhhhh
         onView(withId(R.id.usernameEditText)).perform(typeText("topnolan1@gmail.com"), closeSoftKeyboard())
         onView(withId(R.id.passwordEditText)).perform(typeText("password"), closeSoftKeyboard())
         onView(withId(R.id.loginButton)).perform(click())
@@ -308,11 +315,34 @@ class LoginTester{
     @Test
     fun validActionByDefault() {
         val auth = FirebaseAuth.getInstance()
+        // If no current user, check if this matched
         if (auth.currentUser == null){
             onView(withId(R.id.usernameEditText)).check(matches(isDisplayed()))
-        } else{
+        } else{ // else we should be on profile view
             onView(withId(R.id.contentFrame)).check(matches(isDisplayed()))
         }
     }
+    @Test
+    fun invalidSignIn() {
+        val auth = FirebaseAuth.getInstance()
+        // SignOut if not signed out already
+        auth.signOut()
+
+        // Let firebase sign out
+        Thread.sleep(5000)
+        activity = ActivityScenario.launch(LoginActivity::class.java)
+        // Type valid credentials and click login button
+        onView(withId(R.id.usernameEditText)).perform(typeText("topnolanbloasdahdkjw2@gmail.com"), closeSoftKeyboard())
+        onView(withId(R.id.passwordEditText)).perform(typeText("passsadadsaword"), closeSoftKeyboard())
+        onView(withId(R.id.loginButton)).perform(click())
+        // Sleep for a few seconds to allow firebase to do its thing
+        Thread.sleep(5000)
+
+        // Verify that ProfileActivity is displayed, just try and look for some id that should be on profile if we logged in
+        onView(withId(R.id.usernameEditText)).check(matches(isDisplayed()))
+    }
+
 }
+
+
 
