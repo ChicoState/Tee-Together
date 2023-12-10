@@ -60,6 +60,7 @@ class ScoreCardResultHandler(){
             holes?.forEach { holeData ->
                 val holeMap = hashMapOf(
                     "score" to holeData.score,
+                    "par" to holeData.par,
                     "fir" to holeData.fir,
                     "gir" to holeData.gir
                 )
@@ -142,6 +143,15 @@ class ScoreCardResultHandler(){
                 scorePerHole.setPadding(8)
                 scorePerHole.setBackgroundResource(R.drawable.cell_shape)
 
+                val par = TextView(context)
+                par.layoutParams = TableRow.LayoutParams(
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.WRAP_CONTENT
+                )
+                par.text = "Par: ${holeData.par}"
+                par.setPadding(8)
+                par.setBackgroundResource(R.drawable.cell_shape)
+
                 // FIR (Fairway in Regulation)
                 val firStatus = TextView(context)
                 firStatus.layoutParams = TableRow.LayoutParams(
@@ -165,6 +175,7 @@ class ScoreCardResultHandler(){
                 // Add views to the TableRow
                 hole.addView(holeNumber)
                 hole.addView(scorePerHole)
+                hole.addView(par)
                 hole.addView(firStatus)
                 hole.addView(girStatus)
 

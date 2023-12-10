@@ -50,20 +50,35 @@ class PreviousGamesBuilder(){
                 )
                 date.text = doc.getDate("timestamp").toString()
 
+                val holeDataList = doc.get("holes") as ArrayList<HashMap<String, Any>>?
+
                 val finalScore = TextView(context)
                 finalScore.layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                val strokes = doc.get("strokes") as List<Int>
+                // Sum up the scores from HoleData objects
                 var count = 0
-                for (stroke in strokes){
-                    count += stroke
+                var par = 0
+                holeDataList?.let {
+                    for (holeDataMap in it) {
+                        val holeData = HoleData(
+                            (holeDataMap["score"] as? Long)?.toInt() ?: 0,
+                            (holeDataMap["par"] as? Long)?.toInt() ?: 0,
+                            holeDataMap["fir"] as Boolean,
+                            holeDataMap["gir"] as Boolean
+                        )
+                        count += holeData.score
+                        par += holeData.par
+                    }
                 }
-                finalScore.text = "Final Score: $count"
-                finalScore.setPadding(16, 0, 0 , 0)
+
+                finalScore.text = "Final Score: $count Par: $par"
+                finalScore.setPadding(16, 0, 0, 0)
+
                 game.addView(date)
                 game.addView(finalScore)
+
                 container.addView(game)
             }
         }

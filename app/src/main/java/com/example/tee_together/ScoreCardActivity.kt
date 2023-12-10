@@ -3,6 +3,8 @@ package com.example.tee_together //LOOK AT THE COMMENTS AROUND LINE 40-50
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -12,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import android.widget.CheckBox
+import android.widget.EditText
 import java.io.Serializable
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -59,7 +62,7 @@ class ScoreCardHandler{
     private var holes = mutableListOf<HoleData>()
 
     fun createNewHole(container: LinearLayout, context: Context){
-        holes.add(HoleData(0, false, false))
+        holes.add(HoleData(0, 0,false, false))
         val newScore = LinearLayout(context)
         newScore.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -85,8 +88,14 @@ class ScoreCardHandler{
         girCheckbox.text = "GIR"
         girCheckbox.setPadding(16)
 
-        newScore.addView(firCheckbox)
-        newScore.addView(girCheckbox)
+        val parEditText = EditText(context)
+        parEditText.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        parEditText.hint = "Par"
+        parEditText.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+        parEditText.setPadding(16)
 
         val holeNumber = TextView(context)
         holeNumber.layoutParams = LinearLayout.LayoutParams(
@@ -137,8 +146,11 @@ class ScoreCardHandler{
         }
 
         newScore.addView(holeNumber)
-        newScore.addView(incrementButton)
+        newScore.addView(firCheckbox)
+        newScore.addView(girCheckbox)
+        newScore.addView(parEditText)
         newScore.addView(decrementButton)
+        newScore.addView(incrementButton)
         newScore.addView(holeScore)
 
         firCheckbox.setOnCheckedChangeListener { _, isChecked ->
@@ -148,6 +160,21 @@ class ScoreCardHandler{
         girCheckbox.setOnCheckedChangeListener { _, isChecked ->
             holes[index].gir = isChecked
         }
+
+        parEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val par = s.toString().toIntOrNull() ?: 0
+                holes[holeCount - 1].par = par
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //not needed but you have to define these for some reason
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //not needed
+            }
+        })
 
     }
     fun getStrokesForHoles(): MutableList<HoleData> {
