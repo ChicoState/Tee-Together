@@ -452,4 +452,19 @@ class CreateAccountTester {
         onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
     }
 }
+@RunWith(AndroidJUnit4::class)
+class MainActivityTester{
+    private lateinit var activity: ActivityScenario<MainActivity>
 
+    @Before
+    fun setUp() {
+        activity = ActivityScenario.launch(MainActivity::class.java)
+    }
+
+    @Test
+    fun expectedMainActivity() {
+        // Verify that MainActivity has the two buttons
+        onView(withId(R.id.button)).check(matches(isDisplayed()))
+        onView(withId(R.id.button2)).check(matches(isDisplayed()))
+    }
+}
