@@ -462,9 +462,26 @@ class MainActivityTester{
     }
 
     @Test
-    fun expectedMainActivity() {
+    fun expectedRenderOfMainActivity() {
         // Verify that MainActivity has the two buttons
         onView(withId(R.id.button)).check(matches(isDisplayed()))
         onView(withId(R.id.button2)).check(matches(isDisplayed()))
     }
+    @Test
+    fun travelToCreateAccountActivityFromMainActivity() {
+        onView(withId(R.id.button)).perform(click())
+        Thread.sleep(5000)
+        onView(withId(R.id.editTextPassword)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun travelToLoginActivityFromMainActivity() {
+        // Make sure we are signed out before moving to login page for consistency sake
+        val auth = FirebaseAuth.getInstance()
+        auth.signOut()
+
+        onView(withId(R.id.button2)).perform(click())
+        Thread.sleep(5000)
+        onView(withId(R.id.loginButton)).check(matches(isDisplayed()))
+    }
+
 }
