@@ -531,6 +531,10 @@ class ProfileActivityTester{
         onView(withId(R.id.btnNewScorecard)).perform(click())
         onView(withId(R.id.add_hole)).check(matches(isDisplayed()))
     }
+    // Oddly, this test won't work correctly
+    //  I get an error that the button can't be clicked?
+    //  Works on our end when using an actual emulator, so ...
+    //  Keep, probably useful to know we found something not necessarily functioning as desired
     @Test
     fun verifyPreviousGameButtonWorksCorrectly() {
         // Make sure we sign in just in case
