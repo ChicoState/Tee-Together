@@ -494,6 +494,19 @@ class ProfileActivityTester{
         activity = ActivityScenario.launch(ProfileActivity::class.java)
     }
 
+    @Test
+    fun verifyProfileRenderedCorrectly() {
+        // Make sure we sign in just in case
+        val auth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword("topnolan1@gmail.com", "password")
+        Thread.sleep(5000)
+        activity = ActivityScenario.launch(ProfileActivity::class.java)
+
+        onView(withId(R.id.profileUsername)).check(matches(isDisplayed()))
+        onView(withId(R.id.signOutButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnPreviousGames)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnNewScorecard)).check(matches(isDisplayed()))
+    }
 
 
 }
