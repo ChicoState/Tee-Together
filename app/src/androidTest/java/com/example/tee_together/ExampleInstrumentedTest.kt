@@ -228,6 +228,7 @@ class ScoreCardHandlerTest {
     @Test
     fun verifyMaximumHolesNotExceeded() {
         val linearlayout = LinearLayout(context)
+        // We have to prepare the looper lol, complains that Toasts can't be made if we don't do this first, again whatever
         Looper.prepare()
         // Create a new hole
         for (i in 0..17){
@@ -255,9 +256,5 @@ class ScoreCardHandlerTest {
         assertEquals(15,strokes.size)
 
     }
-
-
-
-
-
+    
 }
