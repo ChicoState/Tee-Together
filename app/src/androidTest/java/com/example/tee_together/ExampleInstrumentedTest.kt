@@ -223,6 +223,24 @@ class ScoreCardHandlerTest {
         assertEquals("Score: 1", secondScoreCount.text.toString())
     }
 
+    @Test
+    fun verifyMaximumHolesNotExceeded() {
+        val linearlayout = LinearLayout(context)
+        // Create a new hole
+        for (i in 0..17){
+            handler.createNewHole(linearlayout, context)
+        }
+        handler.createNewHole(linearlayout, context)
+
+        val nineteenthHole = linearlayout.getChildAt(18)
+        // Apparently Android studio thinks this is more readable lol, whatever it says
+        var maxHolesRespected: Boolean = nineteenthHole == null
+
+        assertEquals(true, maxHolesRespected)
+
+    }
+
+    
 
 
 
