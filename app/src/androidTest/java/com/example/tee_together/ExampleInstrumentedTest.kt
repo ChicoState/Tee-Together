@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.firebase.auth.FirebaseAuth
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -255,6 +256,22 @@ class ScoreCardHandlerTest {
 
         assertEquals(15,strokes.size)
 
+    }
+
+}
+
+@RunWith(AndroidJUnit4::class)
+class PreviousGamesTester{
+    private lateinit var builder: PreviousGamesBuilder
+    private lateinit var context: android.content.Context
+    private lateinit var auth: FirebaseAuth
+
+    // Set up our testing environment. Get context and initialize the handler
+    @Before
+    fun setUp() {
+        context = ApplicationProvider.getApplicationContext()
+        builder = PreviousGamesBuilder()
+        auth.signInWithEmailAndPassword("topnolan1@gmail.com","password")
     }
     
 }
