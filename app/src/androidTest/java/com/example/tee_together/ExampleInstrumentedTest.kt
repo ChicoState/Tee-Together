@@ -485,3 +485,16 @@ class MainActivityTester{
     }
 
 }
+@RunWith(AndroidJUnit4::class)
+class ProfileActivityTester{
+    private lateinit var activity: ActivityScenario<ProfileActivity>
+
+    @Before
+    fun setUp() {
+        activity = ActivityScenario.launch(ProfileActivity::class.java)
+    }
+
+
+
+}
+
