@@ -1,5 +1,6 @@
 package com.example.tee_together
 
+import android.os.Looper
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -165,13 +166,14 @@ class ScoreCardHandlerTest {
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
         val secondHole = linearlayout.getChildAt(1) as LinearLayout
 
-        val firstHoleCount = firstHole.getChildAt(3) as TextView
-        val secondHoleCount = secondHole.getChildAt(3) as TextView
+        val firstHoleCount = firstHole.getChildAt(0) as TextView
+        val secondHoleCount = secondHole.getChildAt(0) as TextView
 
         assertEquals("Hole 1", firstHoleCount.text.toString())
         assertEquals("Hole 2", secondHoleCount.text.toString())
     }
 
+    @Test
     fun verifyMultipleHolesCanBeDecrementedIncremented() {
         val linearlayout = LinearLayout(context)
         // Create a new hole
@@ -226,6 +228,7 @@ class ScoreCardHandlerTest {
     @Test
     fun verifyMaximumHolesNotExceeded() {
         val linearlayout = LinearLayout(context)
+        Looper.prepare()
         // Create a new hole
         for (i in 0..17){
             handler.createNewHole(linearlayout, context)
@@ -239,8 +242,21 @@ class ScoreCardHandlerTest {
         assertEquals(true, maxHolesRespected)
 
     }
+    @Test
+    fun verifyScoresListBeingUpdated() {
+        val linearlayout = LinearLayout(context)
+        // Create a new hole
+        for (i in 0..14){
+            handler.createNewHole(linearlayout, context)
+        }
 
-    
+        val strokes = handler.getStrokesForHoles()
+
+        assertEquals(15,strokes.size)
+
+    }
+
+
 
 
 
