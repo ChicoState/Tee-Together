@@ -18,20 +18,24 @@ class CreateAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        // grab current instance of FirebaseAuth
         auth = FirebaseAuth.getInstance()
-
+        // set a listener on the create account button
         binding.buttonCreateAccount.setOnClickListener {
-            val displayName = binding.editTextDisplayName.text.toString().trim() // Add this line to get the display name
+            // grab the current values of each text field, trim any ending whitespace
+            val displayName = binding.editTextDisplayName.text.toString().trim()
             val firstName = binding.editTextFirstName.text.toString().trim()
             val lastName = binding.editTextLastName.text.toString().trim()
             val email = binding.editTextEmail.text.toString().trim()
             val password = binding.editTextPassword.text.toString().trim()
-
+            // if no text fields empty, great and try to create a new user with the information given
             if (email.isNotEmpty() && password.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && displayName.isNotEmpty()) {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    // if account created succesfully
                     if (task.isSuccessful) {
+                        // get current user information
                         val user = auth.currentUser
+                        // send a change request to firebase
                         val userProfileChangeRequest = UserProfileChangeRequest.Builder()
                             .setDisplayName(displayName)
                             .build()
@@ -44,7 +48,7 @@ class CreateAccountActivity : AppCompatActivity() {
                                     "lastName" to lastName,
                                     "email" to email
                                 )
-
+                                // Store user information to firebase, and go to profile page
                                 FirebaseFirestore.getInstance().collection("users").document(user.uid).set(userMap)
                                     .addOnCompleteListener { firestoreTask ->
                                         if (firestoreTask.isSuccessful) {
@@ -61,7 +65,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         displayError(task.exception)
                     }
                 }
-            } else {
+            } else { // if not all fields valid, make Toast widget to inform user
                 Toast.makeText(this, "Please fill out all fields.", Toast.LENGTH_LONG).show()
             }
         }

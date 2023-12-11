@@ -2,19 +2,19 @@ package com.example.tee_together
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
-import android.widget.CheckBox
-import android.graphics.Color
 import com.google.firebase.auth.FirebaseAuth
-import android.widget.Toast
-import android.widget.Button
-import android.widget.EditText
-import android.text.TextUtils
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -99,6 +99,7 @@ class ScoreCardActivity : AppCompatActivity() {
 
         changeToResultButton.setOnClickListener {
             val name = intent.getStringExtra("username")
+            // As long as the scorecard isn't empty, goahead and start up the result view
             if (scorecardHandler.getStrokesForHoles().isNotEmpty()) {
                 val intent = Intent(this, ScoreCardResultActivity::class.java)
                 intent.putExtra("player_names", name)
@@ -139,6 +140,9 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
         addUser(currentUser, currentUserName) // Add the current user on initialization
     }
     fun createNewHole(container: LinearLayout, context: Context, incrementHoleCount: Boolean = true) {
+        if (holeCount >= 18){
+            return
+        }
         val userHoleDataMap = users.associateWith { UserHoleData(0, 0, false, false) }
             .toMutableMap() // Convert to MutableMap
         val newHoleData = HoleData(userHoleDataMap)
@@ -195,7 +199,6 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
                 setPadding(8)
                 setTextColor(Color.WHITE)
             }
-
             val incrementButton = ImageButton(context).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
