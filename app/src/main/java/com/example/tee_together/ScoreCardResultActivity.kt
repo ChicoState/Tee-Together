@@ -15,50 +15,66 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.Button
 
-
 class ScoreCardResultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scorecard_result)
 
-        val tableLayoutContainer = findViewById<TableLayout>(R.id.scorecard_table)
-        val scoreCardResultHandler = ScoreCardResultHandler()
-
         val user = FirebaseAuth.getInstance().currentUser
         val displayName = user?.displayName ?: "Anonymous"  // Use the display name from FirebaseAuth
 
-        val strokes = intent.getIntArrayExtra("strokes_per_holes")
+        // Retrieve holes and user display names from the intent
+        val holes = intent.getSerializableExtra("hole_data") as? ArrayList<HoleData>
+        val userDisplayNames = intent.extras?.getSerializable("user_display_names") as? Map<String, String> ?: emptyMap()
 
-        scoreCardResultHandler.createResult(displayName, strokes, tableLayoutContainer, this)
+        // Initialize the table layout container and the result handler
+        val tableLayoutContainer = findViewById<TableLayout>(R.id.scorecard_table)
+        val scoreCardResultHandler = ScoreCardResultHandler()
 
+        // Create the result table
+        scoreCardResultHandler.createResult(displayName, holes, userDisplayNames, tableLayoutContainer, this)
+
+        // Set up the navigation back button
         val navigateBack = findViewById<BottomAppBar>(R.id.bottomAppBarScorecardResult)
         navigateBack.setOnClickListener {
             finish()
         }
 
+        // Set up the save button with its click listener
         val saveButton = findViewById<Button>(R.id.save_scorecard_button)
         saveButton.setOnClickListener {
             saveButton.isEnabled = false
-            scoreCardResultHandler.saveScorecardToFirestore(user?.displayName, strokes, this)
+            scoreCardResultHandler.saveScorecardToFirestore(displayName, holes, this)
         }
     }
-
 }
 
 class ScoreCardResultHandler(){
 
-    // Firestore database instance
     private val db = FirebaseFirestore.getInstance()
 
-    fun saveScorecardToFirestore(playerNames: String?, strokes: IntArray?, context: ScoreCardResultActivity) {
+    fun saveScorecardToFirestore(playerNames: String?, holes: ArrayList<HoleData>?, context: ScoreCardResultActivity) {
         val user = FirebaseAuth.getInstance().currentUser
         user?.let { firebaseUser ->
             // Prepare the data map with the timestamp
             val scorecardData = hashMapOf(
-                "playerNames" to playerNames,
-                "strokes" to strokes?.toList(),
-                "timestamp" to FieldValue.serverTimestamp() // Utilizing FieldValue.serverTimestamp() directly
+                "playerNames" to playerNames, // Add the player names
+                "holes" to ArrayList<Map<String, Any>>(), // Add the holes
+                "timestamp" to FieldValue.serverTimestamp() // Add the timestamp
             )
+
+            holes?.forEach { holeData ->
+                holeData.userScores.forEach { (userId, userHoleData) ->
+                    val holeMap = hashMapOf(
+                        "userId" to userId,
+                        "score" to userHoleData.score,
+                        "par" to userHoleData.par,
+                        "fir" to userHoleData.fir,
+                        "gir" to userHoleData.gir
+                    )
+                    (scorecardData["holes"] as ArrayList<Map<String, Any>>).add(holeMap)
+                }
+            }
 
             // Save the data in Firestore
             db.collection("users").document(firebaseUser.uid)
@@ -81,62 +97,62 @@ class ScoreCardResultHandler(){
         }
     }
 
-    fun createResult(playerNames: String?, strokes: IntArray?, container: TableLayout, context: Context){
+    fun createResult(playerNames: String?, holes: ArrayList<HoleData>?, userDisplayNames: Map<String, String>, container: TableLayout, context: Context) {
+        if (holes == null || holes.isEmpty()) return
+        val uniqueUserIds = holes.flatMap { it.userScores.keys }.distinct()
 
-        // Begin by iterating through player names and adding each player
-        val players = TableRow(context)
-        players.gravity = Gravity.CENTER
+        val headerRow = TableRow(context)
+        headerRow.gravity = Gravity.CENTER
         val header = TextView(context)
-        header.layoutParams = TableRow.LayoutParams(
-            TableRow.LayoutParams.WRAP_CONTENT,
-            TableRow.LayoutParams.WRAP_CONTENT
-        )
-        header.text = "Players: "
+        header.text = "Hole/User"
         header.setPadding(8)
         header.setBackgroundResource(R.drawable.cell_shape)
-        // For now, just one player :: TODO::REPLACE WITH ITERATION
-        val player = TextView(context)
-        player.layoutParams = TableRow.LayoutParams(
-            TableRow.LayoutParams.WRAP_CONTENT,
-            TableRow.LayoutParams.WRAP_CONTENT
-        )
-        val user = FirebaseAuth.getInstance().currentUser
-        player.text=user?.displayName ?: "Anonymous"
-        player.setPadding(8)
-        player.setBackgroundResource(R.drawable.cell_shape)
+        headerRow.addView(header)
 
-        players.addView(header)
-        players.addView(player)
-        container.addView(players)
+        uniqueUserIds.forEach { userId ->
+            val userNameTextView = TextView(context)
+            val displayName = userDisplayNames[userId] ?: "Unknown" // Use display name if available, else "Unknown"
+            userNameTextView.text = displayName
+            userNameTextView.setPadding(8)
+            userNameTextView.setBackgroundResource(R.drawable.cell_shape)
+            headerRow.addView(userNameTextView)
+        }
+        container.addView(headerRow)
 
-        //Create recorded strokes per hole
-        var count = 1
-        if (strokes != null) {
-            for (stroke in strokes){
-                val hole = TableRow(context)
-                hole.gravity = Gravity.CENTER
-                val holeNumber = TextView(context)
-                holeNumber.layoutParams = TableRow.LayoutParams(
-                    TableRow.LayoutParams.WRAP_CONTENT,
-                    TableRow.LayoutParams.WRAP_CONTENT
-                )
-                holeNumber.setBackgroundResource(R.drawable.cell_shape)
-                holeNumber.text = "Hole $count"
-                count += 1
-                holeNumber.setPadding(8)
-                //TODO::Replace with for loop to iterate through each players score
-                val strokePerPlayer = TextView(context)
-                strokePerPlayer.layoutParams = TableRow.LayoutParams(
-                    TableRow.LayoutParams.WRAP_CONTENT,
-                    TableRow.LayoutParams.WRAP_CONTENT
-                )
-                strokePerPlayer.text="$stroke"
-                strokePerPlayer.setPadding(8)
-                strokePerPlayer.setBackgroundResource(R.drawable.cell_shape)
-                hole.addView(holeNumber)
-                hole.addView(strokePerPlayer)
-                container.addView(hole)
+        // For each hole, create a row
+        holes.forEachIndexed { index, holeData ->
+            val holeRow = TableRow(context)
+            holeRow.gravity = Gravity.CENTER
+
+            // Add hole number
+            val holeNumberTextView = TextView(context)
+            holeNumberTextView.text = "Hole ${index + 1}"
+            holeNumberTextView.setPadding(8)
+            holeNumberTextView.setBackgroundResource(R.drawable.cell_shape)
+            holeRow.addView(holeNumberTextView)
+
+            // For each user, add their score, par, FIR, and GIR in this hole
+            uniqueUserIds.forEach { userId ->
+                val userHoleData = holeData.userScores[userId]
+                val scoreInfoTextView = TextView(context)
+                // Format the user's score, par, FIR, and GIR
+                scoreInfoTextView.text = formatUserHoleData(userHoleData)
+                scoreInfoTextView.setPadding(8)
+                scoreInfoTextView.setBackgroundResource(R.drawable.cell_shape)
+                holeRow.addView(scoreInfoTextView)
             }
+
+            container.addView(holeRow)
+
         }
     }
+    private fun formatUserHoleData(userHoleData: UserHoleData?): String {
+        // This method returns a formatted string of user's score, par, FIR, and GIR
+        // Example: "Score: 4, Par: 3, FIR: Yes, GIR: No"
+        userHoleData?.let {
+            return "Score: ${it.score}, Par: ${it.par}, FIR: ${if (it.fir) "Yes" else "No"}, GIR: ${if (it.gir) "Yes" else "No"}"
+        }
+        return "N/A"
+    }
 }
+

@@ -27,6 +27,10 @@
             android:padding="16dp"/>
 
         <!-- Existing TableLayout for the scorecard -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
         <TableLayout
             android:id="@+id/scorecard_table"
             android:layout_width="match_parent"
@@ -35,6 +39,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/scorecard_result_title">
         </TableLayout>
+        </HorizontalScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- BottomAppBar within the CoordinatorLayout -->
