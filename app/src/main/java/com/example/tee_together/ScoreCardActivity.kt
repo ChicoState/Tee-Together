@@ -60,7 +60,7 @@ class ScoreCardActivity : AppCompatActivity() {
                     .addOnSuccessListener { documents ->
                         var userAdded = false
                         for (document in documents) {
-                            val userId = document.getString("userId") ?: ""
+                            val userId = document.id
                             val displayName = document.getString("displayName") ?: "Unknown"
                             if (!scorecardHandler.users.contains(userId)) {
                                 scorecardHandler.addUser(userId, displayName)
@@ -129,7 +129,7 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
             users.add(userId)
             userDisplayNames[userId] = displayName
 
-            // Update all existing holes with the new user's data
+            // Add the new user's data to all existing holes
             holes.forEach { holeData ->
                 holeData.userScores[userId] = UserHoleData(0, 0, false, false)
             }
