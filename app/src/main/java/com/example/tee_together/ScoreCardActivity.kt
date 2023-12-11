@@ -99,6 +99,7 @@ class ScoreCardActivity : AppCompatActivity() {
 
         changeToResultButton.setOnClickListener {
             val name = intent.getStringExtra("username")
+            // As long as the scorecard isn't empty, goahead and start up the result view
             if (scorecardHandler.getStrokesForHoles().isNotEmpty()) {
                 val intent = Intent(this, ScoreCardResultActivity::class.java)
                 intent.putExtra("player_names", name)
@@ -145,7 +146,6 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
         if (holeCount >= 18){
             return
         }
-
         val userHoleDataMap = users.associateWith { UserHoleData(0, 0, false, false) }
             .toMutableMap() // Convert to MutableMap
         val newHoleData = HoleData(userHoleDataMap)
@@ -202,7 +202,6 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
                 setPadding(8)
                 setTextColor(Color.WHITE)
             }
-
             val incrementButton = ImageButton(context).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,

@@ -17,10 +17,15 @@ class PreviousGamesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_previous_games)
+        // Grab the linear layout widget that should be currently empty before builder called
         val layoutContainer = findViewById<LinearLayout>(R.id.previous_games)
+        // Create an instance of our builder class
         var previousGamesBuilder = PreviousGamesBuilder()
+        // Begin building the previous games layout and store into our container
         previousGamesBuilder.buildActivity(layoutContainer, this)
+        // Grab the back button
         val previous = findViewById<ImageButton>(R.id.back_from_previous)
+        // Listen to the back button, and move us back to Profile view if pressed
         previous.setOnClickListener{
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
