@@ -1,7 +1,6 @@
 package com.example.tee_together
 
 import java.io.Serializable
-// Edit this to allow for multiple users
 data class UserHoleData(
     var score: Int,
     var par: Int,

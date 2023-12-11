@@ -34,6 +34,7 @@ class ScoreCardActivity : AppCompatActivity() {
 
         val scorecardHandler = ScoreCardHandler(currentUserID, currentUserName)
         val addHoleButton = findViewById<ImageButton>(R.id.add_hole)
+        val removeHoleButton = findViewById<ImageButton>(R.id.remove_hole)
         val containerScores = findViewById<LinearLayout>(R.id.scores_for_holes)
         val changeToResultButton = findViewById<ImageButton>(R.id.change_to_result_scorecard)
         val backToProfileButton = findViewById<ImageButton>(R.id.back_to_profile)
@@ -41,16 +42,14 @@ class ScoreCardActivity : AppCompatActivity() {
         val emailInput = findViewById<EditText>(R.id.emailInput)
         val addEmailButton = findViewById<Button>(R.id.addEmailButton)
 
-
+        // Update/Refresh the scorecard UI
         fun updateScorecard(container: LinearLayout, context: Context) {
             container.removeAllViews()
-            scorecardHandler.createNewHole(container, context) // Call on the scorecardHandler instance
-
-            container.post {
-                container.invalidate()
+            scorecardHandler.holes.forEach { _ ->
+                scorecardHandler.createNewHole(container, context, incrementHoleCount = false)
             }
         }
-
+        // Find users by email
         fun findUsersByEmails(container: LinearLayout, context: Context) {
             val db = FirebaseFirestore.getInstance()
             friendEmails.forEach { email ->
@@ -60,7 +59,7 @@ class ScoreCardActivity : AppCompatActivity() {
                     .addOnSuccessListener { documents ->
                         var userAdded = false
                         for (document in documents) {
-                            val userId = document.getString("userId") ?: ""
+                            val userId = document.id
                             val displayName = document.getString("displayName") ?: "Unknown"
                             if (!scorecardHandler.users.contains(userId)) {
                                 scorecardHandler.addUser(userId, displayName)
@@ -77,9 +76,6 @@ class ScoreCardActivity : AppCompatActivity() {
             }
         }
 
-
-
-
         addEmailButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             if (email.isNotEmpty() && isValidEmail(email)) {
@@ -92,9 +88,13 @@ class ScoreCardActivity : AppCompatActivity() {
             }
         }
 
-
         addHoleButton.setOnClickListener {
             scorecardHandler.createNewHole(containerScores, this)
+        }
+
+        removeHoleButton.setOnClickListener {
+            scorecardHandler.removeHole(containerScores, scorecardHandler.holeCount)
+            containerScores.invalidate() // Refresh the container view to reflect the UI change
         }
 
         changeToResultButton.setOnClickListener {
@@ -120,8 +120,8 @@ class ScoreCardActivity : AppCompatActivity() {
 }
 class ScoreCardHandler(private val currentUser: String, private val currentUserName: String) {
 
-    private var holeCount = 0
-    private var holes = mutableListOf<HoleData>()
+    var holeCount = 0
+    var holes = mutableListOf<HoleData>()
     var users = mutableListOf<String>() // Initialize with current user
     var userDisplayNames = mutableMapOf<String, String>() // Map to hold userId + displayName
     private val userHoleDataMap = mutableMapOf<String, HoleData>()
@@ -130,19 +130,16 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
             users.add(userId)
             userDisplayNames[userId] = displayName
 
-            // Update all existing holes with the new user's data
+            // Add the new user's data to all existing holes
             holes.forEach { holeData ->
-                holeData.userScores[userId] = UserHoleData(0, 0, false, false)
+                holeData.userScores.putIfAbsent(userId, UserHoleData(0, 0, false, false))
             }
         }
     }
-
-
     init {
         addUser(currentUser, currentUserName) // Add the current user on initialization
     }
-
-    fun createNewHole(container: LinearLayout, context: Context) {
+    fun createNewHole(container: LinearLayout, context: Context, incrementHoleCount: Boolean = true) {
         if (holeCount >= 18){
             return
         }
@@ -232,6 +229,7 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
 
             val firCheckbox = CheckBox(context).apply {
                 text = "FIR"
+                setTextColor(Color.WHITE)
                 setOnCheckedChangeListener { _, isChecked ->
                     newHoleData.userScores[userId]?.fir = isChecked
                 }
@@ -239,6 +237,7 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
 
             val girCheckbox = CheckBox(context).apply {
                 text = "GIR"
+                setTextColor(Color.WHITE)
                 setOnCheckedChangeListener { _, isChecked ->
                     newHoleData.userScores[userId]?.gir = isChecked
                 }
@@ -255,9 +254,20 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
         }
 
         container.addView(holeLayout)
-        holeCount++
+        if (incrementHoleCount) {
+            // Only increment holeCount if the flag is true
+            // My attempt at stopping the hole count from incrementing when user is added
+            holeCount++
+        }
     }
     fun getStrokesForHoles(): MutableList<HoleData> {
         return holes
+    }
+    fun removeHole(container: LinearLayout, holeNumber: Int) {
+        if (holeNumber > 0) {
+            holes.removeAt(holeNumber - 1)
+            container.removeViewAt(container.childCount - 1)
+            holeCount--
+        }
     }
 }

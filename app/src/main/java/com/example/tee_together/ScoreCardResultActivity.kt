@@ -3,6 +3,7 @@ package com.example.tee_together
 import android.content.Context
 import com.google.firebase.firestore.FieldValue
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -26,6 +27,8 @@ class ScoreCardResultActivity : AppCompatActivity() {
         // Retrieve holes and user display names from the intent
         val holes = intent.getSerializableExtra("hole_data") as? ArrayList<HoleData>
         val userDisplayNames = intent.extras?.getSerializable("user_display_names") as? Map<String, String> ?: emptyMap()
+        // Added this to hold all names in match
+        val allPlayerNames = userDisplayNames.values.toList() // Create a list of all player names
 
         // Initialize the table layout container and the result handler
         val tableLayoutContainer = findViewById<TableLayout>(R.id.scorecard_table)
@@ -44,7 +47,7 @@ class ScoreCardResultActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.save_scorecard_button)
         saveButton.setOnClickListener {
             saveButton.isEnabled = false
-            scoreCardResultHandler.saveScorecardToFirestore(displayName, holes, this)
+            scoreCardResultHandler.saveScorecardToFirestore(allPlayerNames, holes, this)
         }
     }
 }
@@ -53,49 +56,53 @@ class ScoreCardResultHandler(){
 
     private val db = FirebaseFirestore.getInstance()
 
-    fun saveScorecardToFirestore(playerNames: String?, holes: ArrayList<HoleData>?, context: ScoreCardResultActivity) {
+    fun saveScorecardToFirestore(playerNames: List<String>, holes: ArrayList<HoleData>?, context: ScoreCardResultActivity) {
         val user = FirebaseAuth.getInstance().currentUser
         user?.let { firebaseUser ->
-            // Prepare the data map with the timestamp
-            val scorecardData = hashMapOf(
-                "playerNames" to playerNames, // Add the player names
-                "holes" to ArrayList<Map<String, Any>>(), // Add the holes
-                "timestamp" to FieldValue.serverTimestamp() // Add the timestamp
-            )
+            // Create a map for each user's complete scorecard
+            val userScorecards = mutableMapOf<String, ArrayList<Map<String, Any>>>()
 
             holes?.forEach { holeData ->
                 holeData.userScores.forEach { (userId, userHoleData) ->
+                    if (!userScorecards.containsKey(userId)) {
+                        userScorecards[userId] = arrayListOf()
+                    }
                     val holeMap = hashMapOf(
-                        "userId" to userId,
-                        "score" to userHoleData.score,
-                        "par" to userHoleData.par,
                         "fir" to userHoleData.fir,
-                        "gir" to userHoleData.gir
+                        "gir" to userHoleData.gir,
+                        "par" to userHoleData.par,
+                        "score" to userHoleData.score,
                     )
-                    (scorecardData["holes"] as ArrayList<Map<String, Any>>).add(holeMap)
+                    userScorecards[userId]?.add(holeMap)
                 }
             }
 
-            // Save the data in Firestore
-            db.collection("users").document(firebaseUser.uid)
-                .collection("games").add(scorecardData)
-                .addOnSuccessListener {
-                    // Handle success
-                    context.runOnUiThread {
-                        Toast.makeText(context, "Scorecard saved successfully.", Toast.LENGTH_SHORT).show()
+            // Save each user's scorecard
+            userScorecards.forEach { (userId, holesData) ->
+                val scorecardData = hashMapOf(
+                    "playerNames" to playerNames,
+                    "holes" to holesData,
+                    "timestamp" to FieldValue.serverTimestamp()
+                )
+
+                db.collection("users").document(userId)
+                    .collection("games").add(scorecardData)
+                    .addOnSuccessListener {
+                        context.runOnUiThread {
+                            Toast.makeText(context, "Scorecard saved successfully for user: $userId", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
-                    // Handle failure
-                    context.runOnUiThread {
-                        Toast.makeText(context, "Failed to save scorecard: ${e.message}", Toast.LENGTH_SHORT).show()
+                    .addOnFailureListener { e ->
+                        context.runOnUiThread {
+                            Toast.makeText(context, "Failed to save scorecard for user: $userId. Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
+            }
         } ?: run {
-            // Handle case where user is not signed in
             Toast.makeText(context, "Not signed in!", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     fun createResult(playerNames: String?, holes: ArrayList<HoleData>?, userDisplayNames: Map<String, String>, container: TableLayout, context: Context) {
         if (holes == null || holes.isEmpty()) return
