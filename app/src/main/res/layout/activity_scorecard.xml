@@ -36,6 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Enter friend's email"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:inputType="textEmailAddress" />
 
         <Button
