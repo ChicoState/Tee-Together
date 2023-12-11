@@ -69,7 +69,7 @@ class PreviousGamesBuilder() {
                             userScoresMap?.values?.forEach { userDataMap ->
                                 val score = (userDataMap["score"] as? Number)?.toInt() ?: 0
                                 val par = (userDataMap["par"] as? Number)?.toInt() ?: 0
-                                totalScore += score
+                                totalScore += par
                                 totalPar += par
                             }
                         }

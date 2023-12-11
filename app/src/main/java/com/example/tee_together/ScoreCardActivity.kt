@@ -36,6 +36,7 @@ class ScoreCardActivity : AppCompatActivity() {
         val addHoleButton = findViewById<ImageButton>(R.id.add_hole)
         val containerScores = findViewById<LinearLayout>(R.id.scores_for_holes)
         val changeToResultButton = findViewById<ImageButton>(R.id.change_to_result_scorecard)
+        val backToProfileButton = findViewById<ImageButton>(R.id.back_to_profile)
 
         val emailInput = findViewById<EditText>(R.id.emailInput)
         val addEmailButton = findViewById<Button>(R.id.addEmailButton)
@@ -45,7 +46,6 @@ class ScoreCardActivity : AppCompatActivity() {
             container.removeAllViews()
             scorecardHandler.createNewHole(container, context) // Call on the scorecardHandler instance
 
-            // Schedule a UI update on the main thread
             container.post {
                 container.invalidate()
             }
@@ -60,7 +60,7 @@ class ScoreCardActivity : AppCompatActivity() {
                     .addOnSuccessListener { documents ->
                         var userAdded = false
                         for (document in documents) {
-                            val userId = document.getString("userId") ?: ""
+                            val userId = document.id
                             val displayName = document.getString("displayName") ?: "Unknown"
                             if (!scorecardHandler.users.contains(userId)) {
                                 scorecardHandler.addUser(userId, displayName)
@@ -68,7 +68,7 @@ class ScoreCardActivity : AppCompatActivity() {
                             }
                         }
                         if (userAdded) {
-                            updateScorecard(container, context) // Update scorecard after adding users
+                            updateScorecard(container, context) // Call a method to refresh UI
                         }
                     }
                     .addOnFailureListener { e ->
@@ -76,6 +76,8 @@ class ScoreCardActivity : AppCompatActivity() {
                     }
             }
         }
+
+
 
 
         addEmailButton.setOnClickListener {
@@ -88,9 +90,6 @@ class ScoreCardActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show()
             }
-
-            // Update the scorecard here, outside of the if-else block
-            updateScorecard(containerScores, this)
         }
 
 
@@ -107,6 +106,10 @@ class ScoreCardActivity : AppCompatActivity() {
                 intent.putExtra("user_display_names", HashMap(scorecardHandler.userDisplayNames)) // Pass the display names
                 startActivity(intent)
             }
+        }
+        backToProfileButton.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -125,17 +128,9 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
         if (!users.contains(userId)) {
             users.add(userId)
             userDisplayNames[userId] = displayName
-        }
-    }
 
-
-
-    private fun updateHolesWithNewUser(userId: String) {
-        for (holeData in holes) {
-            // Access the userScores map and update it for the given userId
-            val userHoleData = holeData.userScores[userId]
-            if (userHoleData == null) {
-                // If the userHoleData is not found for the userId, create a new one
+            // Add the new user's data to all existing holes
+            holes.forEach { holeData ->
                 holeData.userScores[userId] = UserHoleData(0, 0, false, false)
             }
         }
