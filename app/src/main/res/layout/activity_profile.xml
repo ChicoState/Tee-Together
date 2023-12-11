@@ -9,61 +9,81 @@
     android:fitsSystemWindows="true"
     tools:context=".ProfileActivity">
 
-    <!-- Content View -->
     <FrameLayout
         android:id="@+id/contentFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <!-- Profile Information Container -->
+
+        <!-- Username (TextView) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/background_light"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:background="@android:color/background_light">
+            android:padding="16dp">
 
-            <!-- Username (TextView) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/profileUsername"
                 android:layout_width="299dp"
                 android:layout_height="61dp"
-                android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
+                android:gravity="center"
                 android:text="Username"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
-            <!-- Sign Out Button -->
-            <Button
-                android:id="@+id/signOutButton"
-                android:layout_width="wrap_content"
-                android:layout_height="72dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="Sign Out" />
-
-            <!-- Previous Games Button -->
-            <Button
-                android:id="@+id/btnPreviousGames"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Game History"
-                android:layout_gravity="center" />
-
-            <!-- Start New Scorecard Button -->
             <Button
                 android:id="@+id/btnNewScorecard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:text="Start New Scorecard"
-                android:layout_gravity="center" />
+                android:text="Start New Scorecard" />
 
-            <!-- Add more placeholders for future content here -->
+            <Button
+                android:id="@+id/btnPreviousGames"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Game History" />
+
+            <Button
+                android:id="@+id/signOutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Sign Out" />
+
+            <!-- Add Friends Button -->
+            <Button
+                android:id="@+id/addFriendsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Add Friends" />
+
+            <!-- Friends List Button -->
+            <Button
+                android:id="@+id/friendsListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Friends List" />
         </LinearLayout>
     </FrameLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
-

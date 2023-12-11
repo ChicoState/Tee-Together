@@ -13,3 +13,4 @@ data class UserHoleData(
 data class HoleData(
     var userScores: MutableMap<String, UserHoleData>
 ) : Serializable
+
