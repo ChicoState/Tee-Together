@@ -2,19 +2,19 @@ package com.example.tee_together
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
-import android.widget.CheckBox
-import android.graphics.Color
 import com.google.firebase.auth.FirebaseAuth
-import android.widget.Toast
-import android.widget.Button
-import android.widget.EditText
-import android.text.TextUtils
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -142,6 +142,10 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
     }
 
     fun createNewHole(container: LinearLayout, context: Context) {
+        if (holeCount >= 18){
+            return
+        }
+
         val userHoleDataMap = users.associateWith { UserHoleData(0, 0, false, false) }
             .toMutableMap() // Convert to MutableMap
         val newHoleData = HoleData(userHoleDataMap)
