@@ -41,7 +41,7 @@ class ScoreCardActivity : AppCompatActivity() {
         val emailInput = findViewById<EditText>(R.id.emailInput)
         val addEmailButton = findViewById<Button>(R.id.addEmailButton)
 
-
+        // Update/Refresh the scorecard UI
         fun updateScorecard(container: LinearLayout, context: Context) {
             container.removeAllViews()
             scorecardHandler.createNewHole(container, context) // Call on the scorecardHandler instance
@@ -50,7 +50,7 @@ class ScoreCardActivity : AppCompatActivity() {
                 container.invalidate()
             }
         }
-
+        // Find users by email
         fun findUsersByEmails(container: LinearLayout, context: Context) {
             val db = FirebaseFirestore.getInstance()
             friendEmails.forEach { email ->
@@ -77,9 +77,6 @@ class ScoreCardActivity : AppCompatActivity() {
             }
         }
 
-
-
-
         addEmailButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             if (email.isNotEmpty() && isValidEmail(email)) {
@@ -91,7 +88,6 @@ class ScoreCardActivity : AppCompatActivity() {
                 Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         addHoleButton.setOnClickListener {
             scorecardHandler.createNewHole(containerScores, this)

@@ -14,9 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Profile Information Container -->
-
-        <!-- Username (TextView) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,6 +57,14 @@
                 android:text="Game History" />
 
             <Button
+                android:id="@+id/friendsListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Friends List" />
+
+            <Button
                 android:id="@+id/signOutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,23 +72,6 @@
                 android:layout_marginTop="16dp"
                 android:text="Sign Out" />
 
-            <!-- Add Friends Button -->
-            <Button
-                android:id="@+id/addFriendsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="Add Friends" />
-
-            <!-- Friends List Button -->
-            <Button
-                android:id="@+id/friendsListButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="Friends List" />
         </LinearLayout>
     </FrameLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

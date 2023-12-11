@@ -11,6 +11,7 @@
         android:id="@+id/scorecard_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="24dp"
         android:gravity="center"
         android:text="Scorecard"
         android:textColor="@color/white"
@@ -35,8 +36,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Enter friend's email"
-            android:inputType="textEmailAddress" />
+            android:hint="(Enter friend's email)"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"/>
 
         <Button
             android:id="@+id/addEmailButton"

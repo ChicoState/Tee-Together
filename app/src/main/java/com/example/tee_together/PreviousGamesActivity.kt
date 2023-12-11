@@ -31,59 +31,61 @@ class PreviousGamesActivity : AppCompatActivity() {
 class PreviousGamesBuilder() {
     fun buildActivity(container: LinearLayout, context: Context) {
         val auth = FirebaseAuth.getInstance()
-        val userid = auth.uid.toString()
+        val userId = auth.currentUser?.uid ?: return // Get the current user's ID, return if null
+
         val db = FirebaseFirestore.getInstance()
 
         db.collection("users")
-            .document(userid)
+            .document(userId)
             .collection("games")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 for (doc in querySnapshot) {
+                    // Create layout for each game
                     val game = LinearLayout(context).apply {
                         orientation = LinearLayout.HORIZONTAL
                         layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         )
                         setPadding(16, 16, 16, 16)
                         setBackgroundResource(R.drawable.cell_shape)
                     }
 
+                    // Date TextView
                     val date = TextView(context).apply {
                         layoutParams = LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         )
                         text = doc.getDate("timestamp").toString()
+                        setPadding(8, 8, 8, 8)
                     }
 
-                    val holeDataList = doc.get("holes") as? ArrayList<HashMap<String, Any>>
+                    // Process hole data
+                    val holeDataList = doc.get("holes") as? List<Map<String, Any>>
                     var totalScore = 0
-                    var totalPar = 0
 
-                    holeDataList?.let { list ->
-                        for (holeDataMap in list) {
-                            val userScoresMap = holeDataMap["userScores"] as? Map<String, Map<String, Any>>
-                            userScoresMap?.values?.forEach { userDataMap ->
-                                val score = (userDataMap["score"] as? Number)?.toInt() ?: 0
-                                val par = (userDataMap["par"] as? Number)?.toInt() ?: 0
-                                totalScore += par
-                                totalPar += par
-                            }
-                        }
+
+                    holeDataList?.forEach { holeData ->
+                        val score = (holeData["score"] as? Number)?.toInt() ?: 0
+                        val par = (holeData["par"] as? Number)?.toInt() ?: 0
+                        totalScore += score
+
                     }
 
+                    // Final Score TextView
                     val finalScore = TextView(context).apply {
                         layoutParams = LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT
                         )
-                        text = "Final Score: $totalScore Par: $totalPar"
+                        text = "Final Score: $totalScore"
                         setPadding(16, 0, 0, 0)
                     }
 
+                    // Add views to game layout
                     game.addView(date)
                     game.addView(finalScore)
                     container.addView(game)
