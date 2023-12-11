@@ -49,7 +49,6 @@
 
     </LinearLayout>
 
-    <!-- ScrollView for scorecard -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -61,7 +60,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!-- Dynamic scorecard components will be added here -->
         </LinearLayout>
     </ScrollView>
 

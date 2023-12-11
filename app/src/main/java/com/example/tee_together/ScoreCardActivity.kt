@@ -45,10 +45,8 @@ class ScoreCardActivity : AppCompatActivity() {
         // Update/Refresh the scorecard UI
         fun updateScorecard(container: LinearLayout, context: Context) {
             container.removeAllViews()
-            scorecardHandler.createNewHole(container, context) // Call on the scorecardHandler instance
-
-            container.post {
-                container.invalidate()
+            scorecardHandler.holes.forEach { _ ->
+                scorecardHandler.createNewHole(container, context, incrementHoleCount = false)
             }
         }
         // Find users by email
@@ -122,7 +120,7 @@ class ScoreCardActivity : AppCompatActivity() {
 class ScoreCardHandler(private val currentUser: String, private val currentUserName: String) {
 
     var holeCount = 0
-    private var holes = mutableListOf<HoleData>()
+    var holes = mutableListOf<HoleData>()
     var users = mutableListOf<String>() // Initialize with current user
     var userDisplayNames = mutableMapOf<String, String>() // Map to hold userId + displayName
     private val userHoleDataMap = mutableMapOf<String, HoleData>()
@@ -133,17 +131,14 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
 
             // Add the new user's data to all existing holes
             holes.forEach { holeData ->
-                holeData.userScores[userId] = UserHoleData(0, 0, false, false)
+                holeData.userScores.putIfAbsent(userId, UserHoleData(0, 0, false, false))
             }
         }
     }
-
-
     init {
         addUser(currentUser, currentUserName) // Add the current user on initialization
     }
-
-    fun createNewHole(container: LinearLayout, context: Context) {
+    fun createNewHole(container: LinearLayout, context: Context, incrementHoleCount: Boolean = true) {
         val userHoleDataMap = users.associateWith { UserHoleData(0, 0, false, false) }
             .toMutableMap() // Convert to MutableMap
         val newHoleData = HoleData(userHoleDataMap)
@@ -231,6 +226,7 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
 
             val firCheckbox = CheckBox(context).apply {
                 text = "FIR"
+                setTextColor(Color.WHITE)
                 setOnCheckedChangeListener { _, isChecked ->
                     newHoleData.userScores[userId]?.fir = isChecked
                 }
@@ -238,6 +234,7 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
 
             val girCheckbox = CheckBox(context).apply {
                 text = "GIR"
+                setTextColor(Color.WHITE)
                 setOnCheckedChangeListener { _, isChecked ->
                     newHoleData.userScores[userId]?.gir = isChecked
                 }
@@ -254,7 +251,11 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
         }
 
         container.addView(holeLayout)
-        holeCount++
+        if (incrementHoleCount) {
+            // Only increment holeCount if the flag is true
+            // My attempt at stopping the hole count from incrementing when user is added
+            holeCount++
+        }
     }
     fun getStrokesForHoles(): MutableList<HoleData> {
         return holes
