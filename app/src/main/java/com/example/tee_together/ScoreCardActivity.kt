@@ -34,6 +34,7 @@ class ScoreCardActivity : AppCompatActivity() {
 
         val scorecardHandler = ScoreCardHandler(currentUserID, currentUserName)
         val addHoleButton = findViewById<ImageButton>(R.id.add_hole)
+        val removeHoleButton = findViewById<ImageButton>(R.id.remove_hole)
         val containerScores = findViewById<LinearLayout>(R.id.scores_for_holes)
         val changeToResultButton = findViewById<ImageButton>(R.id.change_to_result_scorecard)
         val backToProfileButton = findViewById<ImageButton>(R.id.back_to_profile)
@@ -93,6 +94,11 @@ class ScoreCardActivity : AppCompatActivity() {
             scorecardHandler.createNewHole(containerScores, this)
         }
 
+        removeHoleButton.setOnClickListener {
+            scorecardHandler.removeHole(containerScores, scorecardHandler.holeCount)
+            containerScores.invalidate() // Refresh the container view to reflect the UI change
+        }
+
         changeToResultButton.setOnClickListener {
             val name = intent.getStringExtra("username")
             if (scorecardHandler.getStrokesForHoles().isNotEmpty()) {
@@ -115,7 +121,7 @@ class ScoreCardActivity : AppCompatActivity() {
 }
 class ScoreCardHandler(private val currentUser: String, private val currentUserName: String) {
 
-    private var holeCount = 0
+    var holeCount = 0
     private var holes = mutableListOf<HoleData>()
     var users = mutableListOf<String>() // Initialize with current user
     var userDisplayNames = mutableMapOf<String, String>() // Map to hold userId + displayName
@@ -252,5 +258,12 @@ class ScoreCardHandler(private val currentUser: String, private val currentUserN
     }
     fun getStrokesForHoles(): MutableList<HoleData> {
         return holes
+    }
+    fun removeHole(container: LinearLayout, holeNumber: Int) {
+        if (holeNumber > 0) {
+            holes.removeAt(holeNumber - 1)
+            container.removeViewAt(container.childCount - 1)
+            holeCount--
+        }
     }
 }
