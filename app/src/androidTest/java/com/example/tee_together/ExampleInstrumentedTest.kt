@@ -45,7 +45,9 @@ class ScoreCardHandlerTest {
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
-        handler = ScoreCardHandler()
+        val auth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword("topnolan1@gmail.com", "password")
+        handler = ScoreCardHandler(auth.currentUser?.uid?:"Blah", auth.currentUser?.displayName?:"Blahblah")
     }
 
     @Test
@@ -54,15 +56,20 @@ class ScoreCardHandlerTest {
         // Create a new hole
         handler.createNewHole(linearlayout, context)
 
+
         // This should be a linear layout according to how our handler works, so convert the view to it
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
+
+        val firstHoleUser = firstHole.getChildAt(1) as LinearLayout
+        val incrementFirstHole = firstHoleUser.getChildAt(2) as ImageButton
+        val decrementFirstHole = firstHoleUser.getChildAt(3) as ImageButton
+        // The second widget in linear layout is the score
+        val firstHoleScore = firstHoleUser.getChildAt(1) as TextView
         // The first widget in linear layout is the hole number
         val firstHoleNumberView = firstHole.getChildAt(0) as TextView
-        // The second widget in linear layout is the score
-        val firstHoleScore = firstHole.getChildAt(3) as TextView
 
         assertEquals("Hole 1", firstHoleNumberView.text.toString())
-        assertEquals("Score: 1", firstHoleScore.text.toString())
+        assertEquals("Score: 0", firstHoleScore.text.toString())
 
     }
 
@@ -74,13 +81,16 @@ class ScoreCardHandlerTest {
 
         // This should be a linear layout according to how our handler works, so convert the view to it
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
-        val incrementFirstHole = firstHole.getChildAt(1) as ImageButton
-        // The second widget in linear layout is the score
-        val firstHoleScore = firstHole.getChildAt(3) as TextView
 
-        assertEquals("Score: 1", firstHoleScore.text.toString())
+        val firstHoleUser = firstHole.getChildAt(1) as LinearLayout
+        val incrementFirstHole = firstHoleUser.getChildAt(2) as ImageButton
+        val decrementFirstHole = firstHoleUser.getChildAt(3) as ImageButton
+        // The second widget in linear layout is the score
+        val firstHoleScore = firstHoleUser.getChildAt(1) as TextView
+
+        assertEquals("Score: 0", firstHoleScore.text.toString())
         incrementFirstHole.performClick()
-        assertEquals("Score: 2", firstHoleScore.text.toString())
+        assertEquals("Score: 1", firstHoleScore.text.toString())
 
     }
 
@@ -92,15 +102,16 @@ class ScoreCardHandlerTest {
 
         // This should be a linear layout according to how our handler works, so convert the view to it
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
-        val incrementFirstHole = firstHole.getChildAt(1) as ImageButton
-        // The second widget in linear layout is the score
-        val firstHoleScore = firstHole.getChildAt(3) as TextView
+
+        val firstHoleUser = firstHole.getChildAt(1) as LinearLayout
+        val incrementFirstHole = firstHoleUser.getChildAt(2) as ImageButton
+
+        val firstHoleScore = firstHoleUser.getChildAt(1) as TextView
 
         // Click increment 100 times
-        for(i in 1 .. 100){
+        for(i in 1 .. 101){
             incrementFirstHole.performClick()
-            val currScore = i + 1
-            assertEquals("Score: $currScore", firstHoleScore.text.toString())
+            assertEquals("Score: $i", firstHoleScore.text.toString())
         }
 
     }
@@ -113,9 +124,11 @@ class ScoreCardHandlerTest {
 
         // This should be a linear layout according to how our handler works, so convert the view to it
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
-        val decrementFirstHole = firstHole.getChildAt(2) as ImageButton
+        val firstHoleUser = firstHole.getChildAt(1) as LinearLayout
+
+        val decrementFirstHole = firstHoleUser.getChildAt(3) as ImageButton
         // The second widget in linear layout is the score
-        val firstHoleScore = firstHole.getChildAt(3) as TextView
+        val firstHoleScore = firstHoleUser.getChildAt(1) as TextView
 
         assertEquals("Score: 1", firstHoleScore.text.toString())
         decrementFirstHole.performClick()
@@ -130,19 +143,21 @@ class ScoreCardHandlerTest {
 
         // This should be a linear layout according to how our handler works, so convert the view to it
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
-        val incrementFirstHole = firstHole.getChildAt(1) as ImageButton
-        val decrementFirstHole = firstHole.getChildAt(2) as ImageButton
+        val firstHoleUser = firstHole.getChildAt(1) as LinearLayout
+        val incrementFirstHole = firstHoleUser.getChildAt(2) as ImageButton
+        val decrementFirstHole = firstHoleUser.getChildAt(3) as ImageButton
         // The second widget in linear layout is the score
-        val firstHoleScore = firstHole.getChildAt(3) as TextView
+        val firstHoleScore = firstHoleUser.getChildAt(1) as TextView
+
+
         // Increment score 100 times first
         for (i in 1 .. 100){
             incrementFirstHole.performClick()
         }
         // Click decrement 100 times
-        for(i in 101 downTo 1){
+        for(i in 99 downTo 1){
             decrementFirstHole.performClick()
-            val currScore = i - 1
-            assertEquals("Score: $currScore", firstHoleScore.text.toString())
+            assertEquals("Score: $i", firstHoleScore.text.toString())
         }
 
     }
@@ -154,9 +169,10 @@ class ScoreCardHandlerTest {
 
         // This should be a linear layout according to how our handler works, so convert the view to it
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
-        val decrementFirstHole = firstHole.getChildAt(2) as ImageButton
+        val firstHoleUser = firstHole.getChildAt(1) as LinearLayout
+        val decrementFirstHole = firstHoleUser.getChildAt(3) as ImageButton
         // The second widget in linear layout is the score
-        val firstHoleScore = firstHole.getChildAt(3) as TextView
+        val firstHoleScore = firstHoleUser.getChildAt(1) as TextView
         // Score should be 1 before decrement, 0 after
         decrementFirstHole.performClick()
         assertEquals("Score: 0", firstHoleScore.text.toString())
@@ -192,46 +208,50 @@ class ScoreCardHandlerTest {
         val firstHole = linearlayout.getChildAt(0) as LinearLayout
         val secondHole = linearlayout.getChildAt(1) as LinearLayout
 
-        val firstScoreCount = firstHole.getChildAt(3) as TextView
-        val secondScoreCount = secondHole.getChildAt(3) as TextView
+        // This should be a linear layout according to how our handler works, so convert the view to it
+        val firstHoleUser = firstHole.getChildAt(1) as LinearLayout
+        val secondHoleUser = secondHole.getChildAt(1) as LinearLayout
+        val incrementFirstHole = firstHoleUser.getChildAt(2) as ImageButton
+        val decrementFirstHole = firstHoleUser.getChildAt(3) as ImageButton
 
-        val firstScoreInc = firstHole.getChildAt(1) as ImageButton
-        val secondScoreInc = secondHole.getChildAt(1) as ImageButton
+        val incrementSecondHole = secondHoleUser.getChildAt(2) as ImageButton
+        val decrementSecondHole = secondHoleUser.getChildAt(3) as ImageButton
+        // The second widget in linear layout is the score
+        val firstHoleScore = firstHoleUser.getChildAt(1) as TextView
+        val secondHoleScore = secondHoleUser.getChildAt(1) as TextView
 
-        val firstScoreDec = firstHole.getChildAt(2) as ImageButton
-        val secondScoreDec = secondHole.getChildAt(2) as ImageButton
 
 
-        assertEquals("Score: 1", firstScoreCount.text.toString())
-        assertEquals("Score: 1", secondScoreCount.text.toString())
+        assertEquals("Score: 0", firstHoleScore.text.toString())
+        assertEquals("Score: 0", secondHoleScore.text.toString())
 
         // Increment Both To Begin
-        firstScoreInc.performClick()
-        secondScoreInc.performClick()
+        incrementFirstHole.performClick()
+        incrementSecondHole.performClick()
 
-        assertEquals("Score: 2", firstScoreCount.text.toString())
-        assertEquals("Score: 2", secondScoreCount.text.toString())
+        assertEquals("Score: 1", firstHoleScore.text.toString())
+        assertEquals("Score: 1", secondHoleScore.text.toString())
 
         //Increment Just the Second
-        secondScoreInc.performClick()
+        incrementSecondHole.performClick()
         // Verify first hole score didn't increment as well
-        assertEquals("Score: 2", firstScoreCount.text.toString())
+        assertEquals("Score: 1", firstHoleScore.text.toString())
         // Verify second hole score did increment
-        assertEquals("Score: 3", secondScoreCount.text.toString())
+        assertEquals("Score: 2", secondHoleScore.text.toString())
 
         //Decrement Both
-        firstScoreDec.performClick()
-        secondScoreDec.performClick()
-        assertEquals("Score: 1", firstScoreCount.text.toString())
-        assertEquals("Score: 2", secondScoreCount.text.toString())
+        decrementFirstHole.performClick()
+        decrementSecondHole.performClick()
+        assertEquals("Score: 0", firstHoleScore.text.toString())
+        assertEquals("Score: 1", secondHoleScore.text.toString())
 
         // Decrement Just the second hole
-        secondScoreDec.performClick()
+        decrementSecondHole.performClick()
 
         // Verify first hole score didn't decrement as well
-        assertEquals("Score: 1", firstScoreCount.text.toString())
+        assertEquals("Score: 0", firstHoleScore.text.toString())
         // Verify second hole score did decrement
-        assertEquals("Score: 1", secondScoreCount.text.toString())
+        assertEquals("Score: 0", secondHoleScore.text.toString())
     }
 
     @Test
