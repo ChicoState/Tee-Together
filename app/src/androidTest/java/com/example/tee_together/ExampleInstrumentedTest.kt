@@ -551,6 +551,21 @@ class ProfileActivityTester{
         onView(withId(R.id.btnNewScorecard)).perform(click())
         onView(withId(R.id.add_hole)).check(matches(isDisplayed()))
     }
+    // Oddly, this test won't work correctly
+    //  I get an error that the button can't be clicked?
+    //  Works on our end when using an actual emulator, so ...
+    //  Keep, probably useful to know we found something not necessarily functioning as desired
+    @Test
+    fun verifyPreviousGameButtonWorksCorrectly() {
+        // Make sure we sign in just in case
+        val auth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword("topnolan1@gmail.com", "password")
+        Thread.sleep(5000)
+        activity = ActivityScenario.launch(ProfileActivity::class.java)
+
+        onView(withId(R.id.btnPreviousGames)).perform(click())
+        onView(withId(R.id.previous_games)).check(matches(isDisplayed()))
+    }
 }
 
 
